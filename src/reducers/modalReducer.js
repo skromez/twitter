@@ -1,13 +1,16 @@
 const initialState = {
-  LOGIN: false,
-  SIGNUP: false,
-  TWEET: false,
+  openedModal: null,
 };
 
 const modalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case `TOGGLE_${action.payload}`:
-      return { ...state, [action.payload]: !state[action.payload] };
+    case 'CLOSE_ALL_MODALS':
+      return { ...state, openedModal: false };
+    case 'OPEN_MODAL':
+      return {
+        ...state,
+        openedModal: action.payload,
+      };
     default:
       return state;
   }

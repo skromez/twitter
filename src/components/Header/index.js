@@ -5,13 +5,13 @@ import Logo from '../Logo';
 import Button from '../Button';
 import * as actions from '../../actions/actions';
 
-const Header = ({ TOGGLE_MODAL }) => (
+const Header = ({ OPEN_MODAL }) => (
   <HeaderBody className="header">
     <HeaderContainer size="normal" padding="normal">
       <Logo />
       <div className="header__wrapper">
         <Button
-          onClick={() => TOGGLE_MODAL('LOGIN')}
+          onClick={() => OPEN_MODAL('login')}
           type="button"
           className="header__button header__button--login"
           size="105px"
@@ -20,7 +20,7 @@ const Header = ({ TOGGLE_MODAL }) => (
           Login
         </Button>
         <Button
-          onClick={() => TOGGLE_MODAL('SIGNUP')}
+          onClick={() => OPEN_MODAL('signUp')}
           type="button"
           className="header__button header__button--signup"
           size="105px"

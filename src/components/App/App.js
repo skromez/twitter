@@ -8,18 +8,23 @@ import SignUpModal from '../SignUpModal';
 import * as actions from '../../actions/actions';
 
 const App = (props) => {
-  const { state: { TWEET, LOGIN, SIGNUP } } = props;
+  const { openedModal } = props;
   return (
     <div className="app">
       <Router>
         <Layout />
-        {TWEET && <TweetModal />}
+        {openedModal === 'tweet' && <TweetModal />}
       </Router>
-      {SIGNUP && <SignUpModal />}
-      {LOGIN && <Login />}
+      {openedModal === 'signUp' && <SignUpModal />}
+      {openedModal === 'login' && <Login />}
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({ state });
+const mapStateToProps = (state) => {
+  const { openedModal } = state;
+  return {
+    openedModal,
+  };
+};
 export default connect(mapStateToProps, actions)(App);
