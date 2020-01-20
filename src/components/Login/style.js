@@ -95,6 +95,10 @@ const LoginBody = styled.section`
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+  
+  .login__wrapper {
+    position: relative;
+  }
 `;
 
 export default LoginBody;

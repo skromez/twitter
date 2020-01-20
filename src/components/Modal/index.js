@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ModalBody from './style';
-import * as actions from '../../actions/actions';
+import * as actions from '../../store/modal/actions/modalActions';
 
 const Modal = ({ children, size, CLOSE_ALL_MODALS }) => (
   <ModalBody size={size} className="modal">
@@ -18,6 +18,6 @@ const Modal = ({ children, size, CLOSE_ALL_MODALS }) => (
   </ModalBody>
 );
 
-const mapStateToProps = (state) => ({state});
+const mapStateToProps = (state) => ({ state });
 
 export default connect(mapStateToProps, actions)(Modal);

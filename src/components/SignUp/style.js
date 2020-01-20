@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const SignUpBody = styled.section`
+  position: relative;
 
   .signup__heading {
     margin-bottom: 25px;
@@ -10,7 +11,18 @@ const SignUpBody = styled.section`
     font-weight: 700;
     line-height: 24px;
     color: var(--gray);
+  }
+  
+  .signup__error {
+    position: absolute;
+
+    left: 50%;
+    top: 28px;
+    transform: translateX(-50%);
     
+    font-size: 12px;
+
+    color: red;
   }
 
   .signup__input {
@@ -44,6 +56,21 @@ const SignUpBody = styled.section`
     display: flex;
     flex-direction: column;
   }
+  
+  .signup__wrapper {
+    position: relative;
+  }
+`;
+
+export const SuccessBody = styled.div`
+    text-align: center;
+    
+    color: #11bc8c;
+    font-weight: 700;
+    
+    .success__text {
+      margin-top: 15px;
+    }
 `;
 
 export default SignUpBody;

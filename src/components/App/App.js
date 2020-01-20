@@ -5,7 +5,7 @@ import TweetModal from '../TweetModal';
 import Login from '../Login';
 import Layout from '../Layout';
 import SignUpModal from '../SignUpModal';
-import * as actions from '../../actions/actions';
+import * as actions from '../../store/modal/actions/modalActions';
 
 const App = (props) => {
   const { openedModal } = props;

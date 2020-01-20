@@ -1,92 +1,183 @@
 import React, { Component } from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import Input from '../Input';
 import Button from '../Button';
-import SignUpBody from './style';
+import SignUpBody, { SuccessBody } from './style';
+import { connect } from 'react-redux';
+import * as actions from '../../store/modal/actions/modalActions';
+import Error from '../Error';
+import TwitterService from '../../services/TwitterService';
+
+const Success = () => (
+  <SuccessBody>
+    <p className="succes__title">You've successfully registered!</p>
+    <p className="success__text">Please login.</p>
+  </SuccessBody>
+);
 
 class SignUp extends Component {
+
   state = {
-    firstName: null,
-    lastName: null,
-    nickname: null,
-    location: null,
-    password: null,
+    success: false,
+    error: false,
   };
 
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        [name]: value
-      }
-    })
+  twitterService = new TwitterService();
+
+  createUser = async (info) => {
+    const res = await this.twitterService.createUser(info);
+    if (res.message) {
+      this.setState({ error: res.message })
+    } else {
+      this.setState({ success: true });
+      setTimeout(() => {
+        this.props.CLOSE_ALL_MODALS();
+      }, 10000)
+    }
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(this.state)
-  };
 
   render() {
-    const { firstName, lastName, nickname, location, password } = this.state;
+    const { success, error } = this.state;
+    const SignUpScheme = Yup.object({
+      firstName: Yup.string()
+        .min(5, 'Must be 5 characters or more'),
+      lastName: Yup.string()
+        .min(2, 'Must be 2 characters or more'),
+      login: Yup.string()
+        .min(2, 'Must be 2 characters or more')
+        .required('Login required'),
+      location: Yup.string()
+        .min(2, 'Must be 2 characters or more'),
+      password: Yup.string()
+        .min(8, 'Must be 8 characters or more')
+        .required('Password required'),
+    });
+
+    const content = (
+      <SignUpBody>
+        <h1 className="signup__heading">Sign Up</h1>
+        <Formik
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            login: '',
+            location: '',
+            password: '',
+          }}
+          validationSchema={SignUpScheme}
+          onSubmit={(info) => {
+            this.createUser(info);
+          }}
+        >
+          {({
+              touched,
+              errors,
+              values,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => (
+            <form className="signup__form form" onSubmit={handleSubmit}>
+              <div className="signup__wrapper">
+                <Input
+                  border={errors.firstName === undefined && '1px solid red'}
+                  placeholder="First Name"
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.firstName}
+                />
+                {touched.firstName && errors.firstName ? (
+                  <Error>{errors.firstName}</Error>
+                ) : null}
+              </div>
+              <div className="signup__wrapper">
+                <Input
+                  border={errors.lastName === undefined && '1px border red'}
+                  placeholder="Last Name"
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.lastName}
+                />
+                {touched.lastName && errors.lastName ? (
+                  <Error>{errors.lastName}</Error>
+                ) : null}
+              </div>
+              <div className="signup__wrapper">
+                <Input
+                  border={errors.login === undefined && '1px border red'}
+                  placeholder="Login"
+                  id="login"
+                  name="login"
+                  type="login"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.login}
+                />
+                {touched.login && errors.login ? (
+                  <Error>{errors.login}</Error>
+                ) : null}
+              </div>
+              <div className="signup__wrapper">
+                <Input
+                  border={errors.location === undefined && '1px border red'}
+                  placeholder="Location"
+                  id="location"
+                  name="location"
+                  type="location"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.location}
+                />
+                {touched.location && errors.location ? (
+                  <Error>{errors.location}</Error>
+                ) : null}
+              </div>
+              <div className="signup__wrapper">
+                <Input
+                  border={errors.password === undefined && '1px border red'}
+                  placeholder="Password"
+                  id="password"
+                  name="password"
+                  type="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                />
+                {touched.password && errors.password ? (
+                  <Error>{errors.password}</Error>
+                ) : null}
+              </div>
+              <Button
+                className="signup__button"
+                size="100%"
+                type="submit"
+                filled="true"
+              >
+                Sign Up
+              </Button>
+            </form>
+          )}
+        </Formik>
+        {error ? <h1 className="signup__error">{error}</h1> : null}
+      </SignUpBody>
+    );
+
     return (
-        <SignUpBody>
-          <h1 className="signup__heading">Sign Up</h1>
-          <form onSubmit={this.handleSubmit} className="signup__form form">
-            <Input
-              type="text"
-              name="firstName"
-              className="signup__input"
-              value={firstName}
-              onChange={this.handleInputChange}
-              placeholder="First Name"
-            />
-            <Input
-              type="text"
-              name="lastName"
-              className="signup__input"
-              value={lastName}
-              onChange={this.handleInputChange}
-              placeholder="Last Name"
-            />
-            <Input
-              type="text"
-              name="nickname"
-              className="signup__input"
-              value={nickname}
-              onChange={this.handleInputChange}
-              placeholder="Nickname"
-            />
-            <Input
-              type="text"
-              name="location"
-              className="signup__input"
-              value={location}
-              onChange={this.handleInputChange}
-              placeholder="Location"
-            />
-
-            <Input
-              type="password"
-              name="password"
-              className="signup__input"
-              value={password}
-              onChange={this.handleInputChange}
-              placeholder="Password"
-            />
-            <Button
-              className="signup__button"
-              type="submit"
-              size="100%"
-              filled="true"
-            >
-              Sign Up
-            </Button>
-          </form>
-        </SignUpBody>
-    )
+      <>
+        {success ? <Success /> : content}
+      </>
+    );
   }
-
 };
 
-export default SignUp;
+const mapStateToProps = (state) => ({ state });
+
+export default connect(mapStateToProps, actions)(SignUp);

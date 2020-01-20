@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import modalReducer from './reducers/modalReducer';
+import modalReducer from './modal/reducers/modalReducer';
 
 const store = createStore(
   modalReducer,
