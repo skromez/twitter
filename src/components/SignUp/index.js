@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { connect } from 'react-redux';
 import Input from '../Input';
 import Button from '../Button';
 import SignUpBody, { SuccessBody } from './style';
-import { connect } from 'react-redux';
-import * as actions from '../../store/modal/actions/modalActions';
+import * as actions from '../../store/actions/actions';
 import Error from '../Error';
-import TwitterService from '../../services/TwitterService';
 
 const Success = () => (
   <SuccessBody>
@@ -17,29 +16,9 @@ const Success = () => (
 );
 
 class SignUp extends Component {
-
-  state = {
-    success: false,
-    error: false,
-  };
-
-  twitterService = new TwitterService();
-
-  createUser = async (info) => {
-    const res = await this.twitterService.createUser(info);
-    if (res.message) {
-      this.setState({ error: res.message })
-    } else {
-      this.setState({ success: true });
-      setTimeout(() => {
-        this.props.CLOSE_ALL_MODALS();
-      }, 10000)
-    }
-  };
-
-
   render() {
-    const { success, error } = this.state;
+    const { success, error } = this.props.state;
+    console.log(error, success);
     const SignUpScheme = Yup.object({
       firstName: Yup.string()
         .min(5, 'Must be 5 characters or more'),
@@ -68,17 +47,17 @@ class SignUp extends Component {
           }}
           validationSchema={SignUpScheme}
           onSubmit={(info) => {
-            this.createUser(info);
+            this.props.createUser(info);
           }}
         >
           {({
-              touched,
-              errors,
-              values,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
+            touched,
+            errors,
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+          }) => (
             <form className="signup__form form" onSubmit={handleSubmit}>
               <div className="signup__wrapper">
                 <Input
@@ -169,14 +148,13 @@ class SignUp extends Component {
         {error ? <h1 className="signup__error">{error}</h1> : null}
       </SignUpBody>
     );
-
     return (
       <>
         {success ? <Success /> : content}
       </>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => ({ state });
 

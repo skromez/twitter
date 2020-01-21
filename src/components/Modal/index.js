@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ModalBody from './style';
-import * as actions from '../../store/modal/actions/modalActions';
+import * as actions from '../../store/actions/actions';
 
 const Modal = ({ children, size, CLOSE_ALL_MODALS }) => (
   <ModalBody size={size} className="modal">

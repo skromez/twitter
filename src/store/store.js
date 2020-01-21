@@ -1,9 +1,11 @@
-import { createStore } from 'redux';
-import modalReducer from './modal/reducers/modalReducer';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import uiReducer from './reducers/uiReducer';
 
-const store = createStore(
-  modalReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
+const store = createStore(uiReducer, applyMiddleware(thunkMiddleware));
+
+store.subscribe(() => {
+  console.log(store.getState());
+})
 
 export default store;

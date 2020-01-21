@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { HeaderBody, HeaderContainer } from './style';
 import Logo from '../Logo';
 import Button from '../Button';
-import * as actions from '../../store/modal/actions/modalActions';
+import * as actions from '../../store/actions/actions';
 
 const Header = ({ OPEN_MODAL }) => (
   <HeaderBody className="header">
