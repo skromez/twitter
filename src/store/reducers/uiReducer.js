@@ -1,20 +1,15 @@
-import { CLOSE_ALL_MODALS, OPEN_MODAL } from '../types';
+import { TOGGLE_MODAL } from "../types";
 
 const initialState = {
-  openedModal: null,
+  modal: null,
 };
 
 const uiReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CLOSE_ALL_MODALS:
+    case TOGGLE_MODAL:
       return {
         ...state,
-        openedModal: false,
-      };
-    case OPEN_MODAL:
-      return {
-        ...state,
-        openedModal: action.payload,
+        modal: state.modal === action.payload ? null : action.payload,
       };
     default:
       return state;

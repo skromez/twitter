@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import sticker from '../../assets/images/join-us/sticker.png';
 import JoinBody from './style';
 import Button from '../Button';
+import { toggleModal } from '../../store/actions/uiActions';
 
-const Join = ({ handleModal }) => (
+const Join = ({ onSignUpClick }) => (
   <JoinBody>
     <img src={sticker} alt="Sticker" />
     <h2 className="join__heading">
@@ -17,7 +19,7 @@ const Join = ({ handleModal }) => (
       button!
     </p>
     <Button
-      onClick={() => handleModal('signUp')}
+      onClick={onSignUpClick}
       type="button"
       className="join__button"
       filled="true"
@@ -26,6 +28,10 @@ const Join = ({ handleModal }) => (
       Sign Up
     </Button>
   </JoinBody>
-)
+);
 
-export default Join;
+const mapDispatchToProps = (dispatch) => ({
+  onSignUpClick: () => dispatch(toggleModal('signUp')),
+});
+
+export default connect(null, mapDispatchToProps)(Join);

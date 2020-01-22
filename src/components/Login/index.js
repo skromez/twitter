@@ -7,8 +7,9 @@ import Button from '../Button';
 import Modal from '../Modal';
 import LoginBody from './style';
 import Error from '../Error';
-import { loginUser } from '../../store/actions/actions';
 import Spinner from '../Spinner';
+import { toggleModal } from '../../store/actions/uiActions';
+import { loginUser } from '../../store/actions/userActions';
 
 const Login = (props) => {
   const LoginSchema = Yup.object({
@@ -19,7 +20,7 @@ const Login = (props) => {
       .min(8, 'Must be 8 characters or more')
       .required('Password required'),
   });
-  const { loginError, loading } = props;
+  const { loginError, loading, closeModal, onLoginSubmitClick } = props;
 
   const content = (
     <LoginBody>
@@ -32,7 +33,7 @@ const Login = (props) => {
         }}
         validationSchema={LoginSchema}
         onSubmit={(info) => {
-          props.loginUser(info);
+          onLoginSubmitClick(info);
         }}>
         {({
           touched,
@@ -93,7 +94,7 @@ const Login = (props) => {
   );
 
   return (
-    <Modal size="smallModal" className="modal">
+    <Modal handleModal={closeModal} size="smallModal" className="modal">
       {loading ? <Spinner /> : content}
     </Modal>
   );
@@ -101,7 +102,8 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => state.user;
 const mapDispatchToProps = (dispatch) => ({
-  loginUser: (info) => dispatch(loginUser(info)),
+  closeModal: () => dispatch(toggleModal('login')),
+  onLoginSubmitClick: (credentials) => dispatch(loginUser(credentials)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

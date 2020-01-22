@@ -4,7 +4,6 @@ import './index.scss';
 import { Provider } from 'react-redux';
 import App from './components/App/App';
 import store from './store/store';
-import './services/TwitterService';
 
 ReactDOM.render(
   <Provider store={store}>

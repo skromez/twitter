@@ -6,7 +6,7 @@ import Input from '../Input';
 import Button from '../Button';
 import SignUpBody, { SuccessBody } from './style';
 import Error from '../Error';
-import { createUser } from '../../store/actions/actions';
+import { signUpUser } from '../../store/actions/userActions';
 
 const Success = () => (
   <SuccessBody>
@@ -16,7 +16,6 @@ const Success = () => (
 );
 
 const SignUp = (props) => {
-
   const { success, signUpError } = props;
   const SignUpScheme = Yup.object({
     firstName: Yup.string()
@@ -32,7 +31,6 @@ const SignUp = (props) => {
       .min(8, 'Must be 8 characters or more')
       .required('Password required'),
   });
-
   const content = (
     <SignUpBody>
       <h1 className="signup__heading">Sign Up</h1>
@@ -46,7 +44,7 @@ const SignUp = (props) => {
         }}
         validationSchema={SignUpScheme}
         onSubmit={(info) => {
-          props.createUser(info);
+          props.onSignUpSubmitClick(info);
         }}
       >
         {({
@@ -156,7 +154,7 @@ const SignUp = (props) => {
 
 const mapStateToProps = (state) => state.user;
 const mapDispatchToProps = (dispatch) => ({
-  createUser: (info) => dispatch(createUser(info)),
+  onSignUpSubmitClick: (credentials) => dispatch(signUpUser(credentials)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
