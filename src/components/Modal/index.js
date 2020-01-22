@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ModalBody from './style';
-import * as actions from '../../store/actions/actions';
+import { closeAllModals } from '../../store/actions/actions';
 
-const Modal = ({ children, size, CLOSE_ALL_MODALS }) => (
+const Modal = ({ children, size, closeModals }) => (
   <ModalBody size={size} className="modal">
     <div className="modal__container">
       <button
         type="button"
         className="modal__button modal__button--icon"
-        onClick={CLOSE_ALL_MODALS}
+        onClick={closeModals}
       >
         <i className="far fa-times-circle" />
       </button>
@@ -18,6 +18,9 @@ const Modal = ({ children, size, CLOSE_ALL_MODALS }) => (
   </ModalBody>
 );
 
-const mapStateToProps = (state) => ({ state });
+const mapStateToProps = (state) => state.ui;
+const mapDispatchToProps = (dispatch) => ({
+  closeModals: () => dispatch(closeAllModals()),
+});
 
-export default connect(mapStateToProps, actions)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

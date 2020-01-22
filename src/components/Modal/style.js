@@ -9,9 +9,7 @@ const bigModal = css`
 `;
 const smallModal = css`
   .modal__container {
-    width: 260px;
     padding: 15px 15px 20px;
-
   }
 `;
 

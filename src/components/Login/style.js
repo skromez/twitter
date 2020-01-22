@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const LoginBody = styled.section`
+  position: relative;
 
   .login__header {
     font-size: 14px;
@@ -99,6 +100,13 @@ const LoginBody = styled.section`
   .login__wrapper {
     position: relative;
   }
+  .login__error {
+    position: absolute;
+    bottom: -17px;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    color: red;
 `;
 
 export default LoginBody;

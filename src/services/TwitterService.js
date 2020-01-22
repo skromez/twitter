@@ -26,15 +26,30 @@ export default class TwitterService {
     }
   };
 
+  getUserInfo = async () => {
+    if (localStorage.getItem('jwt')) {
+      try {
+        const res = await axiosInstance.get('/user');
+        console.log(res.data);
+        return res.data
+      } catch (err) {
+        console.log(err.response.data);
+        return err.response.data
+      }
+    }
+  };
+
   loginUser = async (info) => {
     try {
-      const res = await axiosInstance.post('auth/login', {
+      const res = await axiosInstance.post('/auth/login', {
         login: info.login,
         password: info.password,
       });
-      return res
+      const token = res.data.access_token;
+      console.log(token);
+      return token
     } catch (err) {
       return err.response.data
     }
-  }
+  };
 }

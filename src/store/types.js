@@ -1,0 +1,13 @@
+export const CLOSE_ALL_MODALS = 'CLOSE_ALL_MODALS';
+export const OPEN_MODAL = 'OPEN_MODAL';
+
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAIL = 'SIGNUP_FAIL';
+export const SIGNUP_NOTIFICATION = 'SIGNUP_NOTIFICATION';
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAIL = 'LOGIN_FAIL';
+
+export const RESET_USER = 'RESET_USER';

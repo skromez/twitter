@@ -19,5 +19,26 @@ export const HeaderContainer = styled(Container)`
     &--signup {
       margin-left: 25px;
     }
+    &--logout {
+      border: none;
+      background-color: transparent;
+    }
+  }
+  
+  .header__username {
+   color: var(--blue);
+   font-weight: 700;
+   margin-left: 20px;
+  }
+  
+  .header__avatar {
+    border-radius: 50px;
+    border: 1px solid var(--gray);
+  }
+  
+  .header__icon {
+    color: var(--blue);
+    font-size: 30px;
+    margin-left: 15px;
   }
 `;

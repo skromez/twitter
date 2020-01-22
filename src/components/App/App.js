@@ -1,11 +1,10 @@
-import React from 'react';
+import React  from 'react';
 import { BrowserRouter as Router, } from 'react-router-dom';
 import { connect } from 'react-redux';
 import TweetModal from '../TweetModal';
 import Login from '../Login';
 import Layout from '../Layout';
 import SignUpModal from '../SignUpModal';
-import * as actions from '../../store/actions/actions';
 
 const App = (props) => {
   const { openedModal } = props;
@@ -21,10 +20,5 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  const { openedModal } = state;
-  return {
-    openedModal,
-  };
-};
-export default connect(mapStateToProps, actions)(App);
+const mapStateToProps = (state) => state.ui;
+export default connect(mapStateToProps)(App);

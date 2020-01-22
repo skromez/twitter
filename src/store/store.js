@@ -1,11 +1,13 @@
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import uiReducer from './reducers/uiReducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from './reducers/index';
 
-const store = createStore(uiReducer, applyMiddleware(thunkMiddleware));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 
 store.subscribe(() => {
   console.log(store.getState());
-})
+});
+
 
 export default store;

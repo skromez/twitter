@@ -15,11 +15,10 @@ const SignUpBody = styled.section`
   
   .signup__error {
     position: absolute;
-
-    left: 50%;
-    top: 28px;
-    transform: translateX(-50%);
+    top: -20px;
     
+    width: 100%;
+    text-align: center;
     font-size: 12px;
 
     color: red;
