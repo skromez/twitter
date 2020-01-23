@@ -1,11 +1,11 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'
 import Avatar from '../Avatar';
 import User from '../User';
 import TweetBody from './style';
 import Data from '../Data';
 import Like from '../Like';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
-import { useParams } from 'react-router-dom'
 
 
 const Tweet = () => {
@@ -33,6 +33,6 @@ const Tweet = () => {
       </div>
     </TweetBody>
   );
-}
+};
 
 export default Tweet;

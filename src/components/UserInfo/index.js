@@ -1,7 +1,6 @@
 import React from 'react';
 import UserInfoBody from './style';
-import { ReactComponent as Calendar } from '../../assets/images/profile/calendar.svg';
-import { ReactComponent as Arrow } from '../../assets/images/profile/arrow.svg';
+import { Calendar, Arrow } from '../../utils/icons';
 
 const UserInfo = ({ text, icon }) => (
   <UserInfoBody>
