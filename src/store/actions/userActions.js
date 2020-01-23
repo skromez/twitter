@@ -5,6 +5,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   RESET_USER,
+  SEND_TWEET_FAIL,
+  SEND_TWEET_REQUEST,
+  SEND_TWEET_SUCCESS,
   SET_USER,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
@@ -43,6 +46,30 @@ const loginFail = (error) => ({
   type: LOGIN_FAIL,
   payload: error,
 });
+
+const sendTweetRequest = () => ({
+  type: SEND_TWEET_REQUEST,
+});
+
+const sendTweetSuccess = () => ({
+  type: SEND_TWEET_SUCCESS,
+});
+
+const sendTweetFail = (error) => ({
+  type: SEND_TWEET_FAIL,
+  payload: error,
+});
+
+export const sendUserTweet = (tweet) => async (dispatch) => {
+  dispatch(sendTweetRequest());
+  try {
+    const res = await axiosInstance.post('/tweet', tweet);
+    console.log(res);
+    dispatch(sendTweetSuccess());
+  } catch (err) {
+    dispatch(sendTweetFail(err.response.data.message));
+  }
+};
 
 export const resetUser = () => ({
   type: RESET_USER,

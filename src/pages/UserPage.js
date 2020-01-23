@@ -2,11 +2,11 @@ import React from 'react';
 import Cover from '../components/Cover';
 import Main from '../components/Main';
 
-const UserPage = ({ handleModal }) => {
+const UserPage = () => {
   return (
     <>
       <Cover />
-      <Main handleModal={handleModal} />
+      <Main />
     </>
   );
 };

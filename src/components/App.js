@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, } from 'react-router-dom';
 import { connect } from 'react-redux';
-import TweetModal from '../TweetModal';
-import Login from '../Login';
-import Layout from '../Layout';
-import SignUpModal from '../SignUpModal';
-import { getUserInfo } from '../../store/actions/userActions';
+import TweetModal from './TweetModal';
+import Login from './Login';
+import Layout from './Layout';
+import SignUpModal from './SignUpModal';
+import { getUserInfo } from '../store/actions/userActions';
 
 class App extends Component {
 

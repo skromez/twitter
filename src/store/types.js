@@ -11,3 +11,7 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const SET_USER = 'SET_USER';
 export const RESET_USER = 'RESET_USER';
 export const REFRESH_SUCCESS = 'REFRESH_SUCCESS';
+
+export const SEND_TWEET_REQUEST = 'SEND_TWEET_REQUEST';
+export const SEND_TWEET_SUCCESS = 'SEND_TWEET_SUCCESS';
+export const SEND_TWEET_FAIL = 'SEND_TWEET_FAIL';

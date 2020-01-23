@@ -12,10 +12,9 @@ import Modal from '../Modal';
 import TweetModalBody from './style';
 
 const TweetModal = (props) => {
-  const { handleModal } = props;
   const { id } = useParams();
   return (
-    <Modal handleModal={handleModal} size="bigModal" type="tweet">
+    <Modal size="bigModal" type="tweet">
       <TweetModalBody>
         <div className="tweet__wrapper">
           <Avatar avatar={UserAvatar} className="tweet__avatar" size="normal" />

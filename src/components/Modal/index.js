@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ModalBody from './style';
 import { signUpNotification } from '../../store/actions/userActions';
-import { toggleModal } from '../../store/actions/uiActions';
 
 const Modal = (props) => {
   const { children, size, handleModal } = props;

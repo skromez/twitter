@@ -1,8 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Modal from '../Modal';
 import SignUp from '../SignUp';
 import { toggleModal } from '../../store/actions/uiActions';
-import { connect } from 'react-redux';
 
 const SignUpModal = ({ closeModal }) => (
   <Modal handleModal={closeModal} size="smallModal">

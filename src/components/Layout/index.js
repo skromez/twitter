@@ -1,12 +1,12 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-
+import { connect } from 'react-redux';
 import Header from '../Header';
 import Error from '../../pages/Error';
 import UserPage from '../../pages/UserPage';
 import IndexPage from '../../pages/IndexPage';
 
-const Layout = () => (
+const Layout = ({isLoggedIn, login}) => (
   <>
     <Header />
     <Switch>
@@ -14,10 +14,20 @@ const Layout = () => (
         <Redirect to="/user/skromez" />
       </Route>
       <Route path="/user/:id" component={UserPage} />
-      <Route exact path="/" component={IndexPage} />
+      <Route exact path="/">
+        {isLoggedIn ? (
+          <Redirect to={`/user/${login}`}>
+            <UserPage />
+          </Redirect>
+        ) : <IndexPage />}
+      </Route>
       <Route path={'/*/*' && '/*/'} component={Error} />
     </Switch>
   </>
 );
 
-export default Layout;
+const mapStateToProps = ({ user: { info } }) => ({
+  isLoggedIn: Boolean(info.id),
+  login: info.login,
+});
+export default connect(mapStateToProps)(Layout);

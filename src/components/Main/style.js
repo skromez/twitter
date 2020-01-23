@@ -7,7 +7,6 @@ export const MainBody = styled.main`
   .feed {
     max-width: 670px;
     position: relative;
-    background: var(--white);
 
     @media (max-width: 850px) {
       margin-top: 80px;
@@ -17,6 +16,10 @@ export const MainBody = styled.main`
 
 export const MainContainer = styled(Container)`
   display: flex;
+  
+  .feed_tweets {
+    margin-top: 20px;
+  }
 
   @media (max-width: 850px) {
     flex-direction: column;
