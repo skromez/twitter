@@ -3,14 +3,14 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   RESET_USER,
+  SEND_TWEET_FAIL,
+  SEND_TWEET_REQUEST,
+  SEND_TWEET_SUCCESS,
   SET_USER,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
-  SEND_TWEET_FAIL,
-  SEND_TWEET_SUCCESS,
-  SEND_TWEET_REQUEST,
 } from '../types';
 
 const initialState = {
@@ -30,6 +30,15 @@ const initialState = {
   signUpError: null,
   loginError: null,
   tweetError: null,
+  posts: [
+    {
+      id: 6,
+      name: 'Dmitry Novikov',
+      login: 'skromez',
+      date: '24 Jan',
+      message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
+    },
+  ],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -81,6 +90,10 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        posts: [
+          action.payload,
+          ...state.posts,
+        ],
       };
     case SEND_TWEET_FAIL:
       return {

@@ -8,67 +8,21 @@ import Tweet from '../Tweet';
 import Join from '../Join';
 import TweetForm from '../TweetForm';
 
-const tweetList = [
-  {
-    id: 1,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-  {
-    id: 2,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-  {
-    id: 3,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-  {
-    id: 4,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-  {
-    id: 5,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-  {
-    id: 6,
-    name: 'Dmitry Novikov',
-    login: 'skromez',
-    date: '24 Jan',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-  },
-];
-
-const TweetList = () => {
+const TweetList = ({ posts }) => {
   const renderItems = (arr) => {
     return arr.map((item) => {
       const {
-        text,
-        name,
-        login,
-        date,
-        id,
+        message,
+        name = 'Dmitry Novikov',
+        login = 'skromez',
+        date = '24 Jan',
       } = item;
       return (
-        <Tweet key={id} text={text} name={name} login={login} date={date} />
+        <Tweet key={message} text={message} name={name} login={login} date={date} />
       );
     });
   };
-  const items = renderItems(tweetList);
+  const items = renderItems(posts);
   return (
     <>
       {items}
@@ -76,17 +30,17 @@ const TweetList = () => {
   );
 };
 
-const Main = ({ isLoggedIn, login }) => {
+const Main = ({ isLoggedIn, login, posts }) => {
   const { id } = useParams();
   return (
     <MainBody>
       <MainContainer size="normal" padding="normal">
-        <Profile />
+        <Profile login={login} />
         <div className="feed">
           {id === login ? <TweetForm /> : null}
           <Tweets />
           <div className="feed_tweets">
-            <TweetList />
+            <TweetList posts={posts} />
           </div>
         </div>
         {isLoggedIn ? null : <Join />}
@@ -95,9 +49,10 @@ const Main = ({ isLoggedIn, login }) => {
   );
 };
 
-const mapStateToProps = ({ user: { info } }) => ({
-  isLoggedIn: Boolean(info.id),
-  login: info.login,
+const mapStateToProps = ({ user }) => ({
+  isLoggedIn: Boolean(user.info.id),
+  login: user.info.login,
+  posts: user.posts,
 });
 
 export default connect(mapStateToProps)(Main);

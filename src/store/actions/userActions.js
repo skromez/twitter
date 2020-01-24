@@ -51,8 +51,9 @@ const sendTweetRequest = () => ({
   type: SEND_TWEET_REQUEST,
 });
 
-const sendTweetSuccess = () => ({
+const sendTweetSuccess = (tweet) => ({
   type: SEND_TWEET_SUCCESS,
+  payload: tweet,
 });
 
 const sendTweetFail = (error) => ({
@@ -63,9 +64,8 @@ const sendTweetFail = (error) => ({
 export const sendUserTweet = (tweet) => async (dispatch) => {
   dispatch(sendTweetRequest());
   try {
-    const res = await axiosInstance.post('/tweet', tweet);
-    console.log(res);
-    dispatch(sendTweetSuccess());
+    await axiosInstance.post('/tweet', tweet);
+    dispatch(sendTweetSuccess(tweet));
   } catch (err) {
     dispatch(sendTweetFail(err.response.data.message));
   }

@@ -15,7 +15,7 @@ const TweetFormBody = styled.div`
    padding-top: 8px;
    
    font-family: inherit;
-   font-size: 11px;
+   font-size: 14px;
    line-height: 15px;
    
    border-radius: 3px;

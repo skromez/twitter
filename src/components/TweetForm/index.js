@@ -18,26 +18,36 @@ const TweetForm = ({ onSendTweetSubmitClick }) => {
         message: '',
       }}
       validationSchema={TweetScheme}
-      onSubmit={(value, helper) => {
+      validate={(value) => {
         const errors = [];
         const hashtags = value.message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
-        if (hashtags.length > 5) {
-          errors.push('There must be at most 5 hashtags');
-        } else errors.pop();
-        if (hashtags.find((item) => item.length > 20)) {
-          errors.push('Length of each hashtag does not exceed 20 characters');
+        if (!value.message) {
+          errors.push('You must provide message');
         }
-        const hashTagDuplicate = (i, index, arr) => arr.length !== Array.from(new Set(arr)).length;
-        const checkHashTagDuplicate = (array) => array.some(hashTagDuplicate);
-        if (checkHashTagDuplicate(hashtags)) errors.push('Hashtags must not repeat');
-        helper.setFieldError('message', errors);
+        if (!hashtags) {
+          errors.push('You must provide hashtags');
+        } else {
+          if (hashtags.length > 5) {
+            errors.push('There must be at most 5 hashtags');
+          }
+          if (hashtags.find((item) => item.length > 20)) {
+            errors.push('Length of each hashtag does not exceed 20 characters');
+          }
+          const hashTagDuplicate = (i, index, arr) => arr.length !== Array
+            .from(new Set(arr)).length;
+          const checkHashTagDuplicate = (array) => array.some(hashTagDuplicate);
+          if (checkHashTagDuplicate(hashtags)) errors.push('Hashtags must not repeat');
+        }
+        return errors.length ? {
+          message: errors,
+        } : undefined;
+      }}
+      onSubmit={(value, {resetForm}) => {
         const res = value.message.trim().split(' ');
         const message = res.filter((item) => item[0] !== '#').join(' ');
-        if (errors.length === 0) {
-          onSendTweetSubmitClick({ message, hashtags });
-        }
-        console.log(hashtags);
-        console.log(message);
+        const hashtags = value.message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
+        onSendTweetSubmitClick({ message, hashtags });
+        resetForm({ message: '' });
       }}
     >
       {({
@@ -60,8 +70,8 @@ const TweetForm = ({ onSendTweetSubmitClick }) => {
               placeholder="Say something cool"
             />
             <div className="tweet-form__wrapper">
-              {touched.message && errors.message ? errors.message.map((item, index) => (
-                <div key={index} className="tweet-form__error">{item}</div>
+              {touched.message && errors.message ? errors.message.map((item) => (
+                <div key={item} className="tweet-form__error">{item}</div>
               )) : null}
             </div>
             <Button

@@ -6,9 +6,7 @@ import User from '../User';
 import UserInfo from '../UserInfo';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
 
-
-const Profile = () => {
-  const { id } = useParams();
+const Profile = ({ login }) => {
   return (
     <ProfileBody>
       <Avatar avatar={UserAvatar} className="profile__avatar" size="big" />
@@ -16,7 +14,7 @@ const Profile = () => {
         className="profile__user"
         direction="columnBig"
         name="Dmitry Novikov"
-        nick={id}
+        login={login}
       />
       <UserInfo text="Joined September 2013" icon="calendar" />
       <UserInfo text="Sochi, Russia" icon="arrow" />
