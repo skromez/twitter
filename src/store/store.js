@@ -5,8 +5,4 @@ import rootReducer from './reducers/index';
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunkMiddleware)));
 
-store.subscribe(() => {
-  console.log(store.getState());
-});
-
 export default store;

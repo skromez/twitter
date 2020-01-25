@@ -8,7 +8,7 @@ import {
   SEND_TWEET_FAIL,
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
-  SET_USER,
+  SET_USER, SET_USER_REQUEST,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
   SIGNUP_REQUEST,
@@ -80,6 +80,10 @@ const fillUser = (userData) => ({
   payload: userData,
 });
 
+const setUserRequest = () => ({
+  type: SET_USER_REQUEST,
+});
+
 export const signOutUser = () => (dispatch) => {
   dispatch(resetUser());
   sessionStorage.removeItem('jwt');
@@ -87,6 +91,7 @@ export const signOutUser = () => (dispatch) => {
 };
 
 export const getUserInfo = () => async (dispatch) => {
+  dispatch(setUserRequest());
   try {
     const { data: userData } = await axiosInstance.get('user');
     dispatch(fillUser(userData));

@@ -42,7 +42,7 @@ const TweetForm = ({ onSendTweetSubmitClick }) => {
           message: errors,
         } : undefined;
       }}
-      onSubmit={(value, {resetForm}) => {
+      onSubmit={(value, { resetForm }) => {
         const res = value.message.trim().split(' ');
         const message = res.filter((item) => item[0] !== '#').join(' ');
         const hashtags = value.message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);

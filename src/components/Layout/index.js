@@ -6,7 +6,7 @@ import Error from '../../pages/Error';
 import UserPage from '../../pages/UserPage';
 import IndexPage from '../../pages/IndexPage';
 
-const Layout = ({isLoggedIn, login}) => (
+const Layout = ({ isLoggedIn, login }) => (
   <>
     <Header />
     <Switch>

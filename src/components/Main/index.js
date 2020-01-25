@@ -30,30 +30,31 @@ const TweetList = ({ posts }) => {
   );
 };
 
-const Main = ({ isLoggedIn, login, posts, name }) => {
+const Main = ({ isLoggedIn, login, posts }) => {
   const { id } = useParams();
-  console.log(name);
-  return (
-    <MainBody>
-      <MainContainer size="normal" padding="normal">
-        <Profile login={login} name={name}/>
-        <div className="feed">
-          {id === login ? <TweetForm /> : null}
-          <Tweets />
-          <div className="feed_tweets">
-            <TweetList posts={posts} />
+  if (isLoggedIn) {
+    return (
+      <MainBody>
+        <MainContainer size="normal" padding="normal">
+          <Profile />
+          <div className="feed">
+            {id === login ? <TweetForm /> : null}
+            <Tweets />
+            <div className="feed_tweets">
+              <TweetList posts={posts} />
+            </div>
           </div>
-        </div>
-        {isLoggedIn ? null : <Join />}
-      </MainContainer>
-    </MainBody>
-  );
+          {isLoggedIn ? null : <Join />}
+        </MainContainer>
+      </MainBody>
+    );
+  }
+  return (<></>);
 };
 
 const mapStateToProps = ({ user }) => ({
   isLoggedIn: Boolean(user.info.id),
   login: user.info.login,
-  name: `${user.info.firstName} ${user.info.lastName}`,
   posts: user.posts,
 });
 

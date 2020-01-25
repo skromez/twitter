@@ -6,6 +6,7 @@ import {
   SEND_TWEET_FAIL,
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
+  SET_USER_REQUEST,
   SET_USER,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
@@ -27,6 +28,7 @@ const initialState = {
   },
   success: null,
   loading: null,
+  dataLoading: null,
   signUpError: null,
   loginError: null,
   tweetError: null,
@@ -90,6 +92,10 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        info: {
+          ...state.info,
+          tweets: state.info.tweets + 1,
+        },
         posts: [
           action.payload,
           ...state.posts,
@@ -100,9 +106,15 @@ const userReducer = (state = initialState, action) => {
         ...state,
         tweetError: action.payload,
       };
+    case SET_USER_REQUEST:
+      return {
+        ...state,
+        dataLoading: true,
+      }
     case SET_USER:
       return {
         ...state,
+        dataLoading: false,
         info: action.payload,
       };
     case RESET_USER:

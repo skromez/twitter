@@ -8,7 +8,6 @@ import SignUpModal from './SignUpModal';
 import { getUserInfo } from '../store/actions/userActions';
 
 class App extends Component {
-
   componentDidMount() {
     const hasSessionToken = sessionStorage.getItem('jwt');
     const { getUserData } = this.props;
@@ -38,6 +37,8 @@ class App extends Component {
 const mapStateToProps = ({ ui, user }) => ({
   showLoginModal: ui.modal === 'login',
   showSignUpModal: ui.modal === 'signUp',
+  dataLoading: user.dataLoading,
+  isLoggedIn: Boolean(user.info.id),
 });
 
 const mapDispatchToProps = (dispatch) => ({
