@@ -6,6 +6,7 @@ const axiosInstance = axios.create({
   headers: {
     Authorization: {
       toString() {
+        if (sessionStorage.getItem('jwt')) return `Bearer ${sessionStorage.getItem('jwt')}`;
         return `Bearer ${localStorage.getItem('jwt')}`;
       },
     },

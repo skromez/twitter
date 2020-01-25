@@ -10,9 +10,12 @@ import { getUserInfo } from '../store/actions/userActions';
 class App extends Component {
 
   componentDidMount() {
-    const hasToken = localStorage.getItem('jwt');
+    const hasSessionToken = sessionStorage.getItem('jwt');
     const { getUserData } = this.props;
-    if (hasToken) {
+    if (hasSessionToken) {
+      getUserData();
+    } else {
+      localStorage.getItem('jwt');
       getUserData();
     }
   }
@@ -30,9 +33,9 @@ class App extends Component {
       </div>
     );
   }
-};
+}
 
-const mapStateToProps = ({ ui }) => ({
+const mapStateToProps = ({ ui, user }) => ({
   showLoginModal: ui.modal === 'login',
   showSignUpModal: ui.modal === 'signUp',
 });

@@ -21,10 +21,11 @@ const Header = (props) => {
               <Avatar avatar={UserAvatar} className="header__avatar" size="normal" />
               <User name={info.firstName} className="header__username" />
               <button
+                type="button"
                 onClick={onSignOutClick}
                 className="header__button header__button--logout"
               >
-                <i className="fas fa-sign-out-alt header__icon"></i>
+                <i className="fas fa-sign-out-alt header__icon"/>
               </button>
             </>
           )

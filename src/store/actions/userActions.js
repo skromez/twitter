@@ -82,6 +82,7 @@ const fillUser = (userData) => ({
 
 export const signOutUser = () => (dispatch) => {
   dispatch(resetUser());
+  sessionStorage.removeItem('jwt');
   localStorage.removeItem('jwt');
 };
 
@@ -108,11 +109,13 @@ export const signUpUser = (credentials) => async (dispatch, getStore) => {
   }
 };
 
-export const loginUser = (credentials) => async (dispatch) => {
+export const loginUser = (credentials, checkbox) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const { data } = await axiosInstance.post('auth/login', credentials);
-    localStorage.setItem('jwt', data.access_token);
+    if (checkbox) {
+      localStorage.setItem('jwt', data.access_token);
+    } else sessionStorage.setItem('jwt', data.access_token);
     dispatch(getUserInfo());
     dispatch(toggleModal('login'));
     dispatch(loginSuccess());

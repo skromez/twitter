@@ -20,7 +20,14 @@ const Login = (props) => {
       .min(8, 'Must be 8 characters or more')
       .required('Password required'),
   });
-  const { loginError, loading, closeModal, onLoginSubmitClick } = props;
+
+
+  const {
+    loginError,
+    loading,
+    closeModal,
+    onLoginSubmitClick,
+  } = props;
 
   const content = (
     <LoginBody>
@@ -30,11 +37,13 @@ const Login = (props) => {
         initialValues={{
           login: '',
           password: '',
+          checkbox: false,
         }}
         validationSchema={LoginSchema}
         onSubmit={(info) => {
-          onLoginSubmitClick(info);
-        }}>
+          onLoginSubmitClick({ login: info.login, password: info.password }, info.checkbox);
+        }}
+      >
         {({
           touched,
           errors,
@@ -75,7 +84,15 @@ const Login = (props) => {
               ) : null}
             </div>
             <label className="form-login__label">
-              <input type="checkbox" className="form-login__checkbox" />
+              <input
+                id="checkbox"
+                name="checkbox"
+                type="checkbox"
+                onBlur={handleBlur}
+                value={values.checkbox}
+                onChange={handleChange}
+                className="form-login__checkbox"
+              />
               <span className="form-login__checkmark" />
               Remember me
             </label>
@@ -103,7 +120,7 @@ const Login = (props) => {
 const mapStateToProps = (state) => state.user;
 const mapDispatchToProps = (dispatch) => ({
   closeModal: () => dispatch(toggleModal('login')),
-  onLoginSubmitClick: (credentials) => dispatch(loginUser(credentials)),
+  onLoginSubmitClick: (credentials, checkbox) => dispatch(loginUser(credentials, checkbox)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

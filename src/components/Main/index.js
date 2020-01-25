@@ -30,12 +30,13 @@ const TweetList = ({ posts }) => {
   );
 };
 
-const Main = ({ isLoggedIn, login, posts }) => {
+const Main = ({ isLoggedIn, login, posts, name }) => {
   const { id } = useParams();
+  console.log(name);
   return (
     <MainBody>
       <MainContainer size="normal" padding="normal">
-        <Profile login={login} />
+        <Profile login={login} name={name}/>
         <div className="feed">
           {id === login ? <TweetForm /> : null}
           <Tweets />
@@ -52,6 +53,7 @@ const Main = ({ isLoggedIn, login, posts }) => {
 const mapStateToProps = ({ user }) => ({
   isLoggedIn: Boolean(user.info.id),
   login: user.info.login,
+  name: `${user.info.firstName} ${user.info.lastName}`,
   posts: user.posts,
 });
 

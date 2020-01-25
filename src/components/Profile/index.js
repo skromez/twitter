@@ -6,14 +6,14 @@ import User from '../User';
 import UserInfo from '../UserInfo';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
 
-const Profile = ({ login }) => {
+const Profile = ({ login, name }) => {
   return (
     <ProfileBody>
       <Avatar avatar={UserAvatar} className="profile__avatar" size="big" />
       <User
         className="profile__user"
         direction="columnBig"
-        name="Dmitry Novikov"
+        name={name}
         login={login}
       />
       <UserInfo text="Joined September 2013" icon="calendar" />
