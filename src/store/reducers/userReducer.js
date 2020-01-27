@@ -3,15 +3,13 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   RESET_USER,
-  SEND_TWEET_FAIL,
-  SEND_TWEET_REQUEST,
-  SEND_TWEET_SUCCESS,
-  SET_USER_REQUEST,
   SET_USER,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
+  GET_USER_REQUEST,
+  GET_USER,
 } from '../types';
 
 const initialState = {
@@ -26,21 +24,27 @@ const initialState = {
     location: null,
     tweets: 0,
   },
+  otherUser: {
+    createdAt: null,
+    id: null,
+    firstName: null,
+    lastName: null,
+    avatar: null,
+    cover: null,
+    login: null,
+    location: null,
+    tweets: 0,
+  },
   success: null,
   loading: null,
-  dataLoading: null,
   signUpError: null,
   loginError: null,
   tweetError: null,
-  posts: [
-    {
-      id: 6,
-      name: 'Dmitry Novikov',
-      login: 'skromez',
-      date: '24 Jan',
-      message: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A at corporis cumque error facilis fuga illo inventore iure nulla obcaecati omnis perferendis perspiciatis quam quod, reiciendis, saepe suscipit vel voluptates!',
-    },
-  ],
+  posts: {
+    total: 0,
+    page: 0,
+    items: [],
+  },
 };
 
 const userReducer = (state = initialState, action) => {
@@ -83,39 +87,21 @@ const userReducer = (state = initialState, action) => {
         loading: false,
         loginError: action.payload,
       };
-    case SEND_TWEET_REQUEST:
+    case SET_USER:
+      return {
+        ...state,
+        info: action.payload,
+      };
+    case GET_USER_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case SEND_TWEET_SUCCESS:
+    case GET_USER:
       return {
         ...state,
         loading: false,
-        info: {
-          ...state.info,
-          tweets: state.info.tweets + 1,
-        },
-        posts: [
-          action.payload,
-          ...state.posts,
-        ],
-      };
-    case SEND_TWEET_FAIL:
-      return {
-        ...state,
-        tweetError: action.payload,
-      };
-    case SET_USER_REQUEST:
-      return {
-        ...state,
-        dataLoading: true,
-      }
-    case SET_USER:
-      return {
-        ...state,
-        dataLoading: false,
-        info: action.payload,
+        otherUser: action.payload,
       };
     case RESET_USER:
       return {

@@ -5,15 +5,18 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   RESET_USER,
-  SEND_TWEET_FAIL,
-  SEND_TWEET_REQUEST,
-  SEND_TWEET_SUCCESS,
-  SET_USER, SET_USER_REQUEST,
+  SET_USER,
   SIGNUP_FAIL,
   SIGNUP_NOTIFICATION,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
+  GET_USER_REQUEST,
+  GET_USER,
 } from '../types';
+
+import {
+  getUserTweets,
+} from './tweetsActions';
 import { toggleModal } from './uiActions';
 
 
@@ -47,41 +50,22 @@ const loginFail = (error) => ({
   payload: error,
 });
 
-const sendTweetRequest = () => ({
-  type: SEND_TWEET_REQUEST,
-});
-
-const sendTweetSuccess = (tweet) => ({
-  type: SEND_TWEET_SUCCESS,
-  payload: tweet,
-});
-
-const sendTweetFail = (error) => ({
-  type: SEND_TWEET_FAIL,
-  payload: error,
-});
-
-export const sendUserTweet = (tweet) => async (dispatch) => {
-  dispatch(sendTweetRequest());
-  try {
-    await axiosInstance.post('/tweet', tweet);
-    dispatch(sendTweetSuccess(tweet));
-  } catch (err) {
-    dispatch(sendTweetFail(err.response.data.message));
-  }
-};
-
 export const resetUser = () => ({
   type: RESET_USER,
 });
 
-const fillUser = (userData) => ({
+const setUser = (userData) => ({
   type: SET_USER,
   payload: userData,
 });
 
-const setUserRequest = () => ({
-  type: SET_USER_REQUEST,
+const getUserRequest = () => ({
+  type: GET_USER_REQUEST,
+});
+
+const getUser = (userData) => ({
+  type: GET_USER,
+  payload: userData,
 });
 
 export const signOutUser = () => (dispatch) => {
@@ -90,11 +74,22 @@ export const signOutUser = () => (dispatch) => {
   localStorage.removeItem('jwt');
 };
 
+export const getOthersData = (login) => async (dispatch) => {
+  dispatch(getUserRequest());
+  try {
+    const { data: userData } = await axiosInstance.get(`user/${login}`);
+    const { data } = await axiosInstance.get(`user/${login}/tweets`);
+    dispatch(getUser(userData));
+    dispatch(getUserTweets(data));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getUserInfo = () => async (dispatch) => {
-  dispatch(setUserRequest());
   try {
     const { data: userData } = await axiosInstance.get('user');
-    dispatch(fillUser(userData));
+    dispatch(setUser(userData));
   } catch (err) {
     console.log(err);
   }

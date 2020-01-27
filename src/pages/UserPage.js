@@ -2,11 +2,11 @@ import React from 'react';
 import Cover from '../components/Cover';
 import Main from '../components/Main';
 
-const UserPage = () => {
+const UserPage = ({ match }) => {
   return (
     <>
       <Cover />
-      <Main />
+      <Main match={match} />
     </>
   );
 };

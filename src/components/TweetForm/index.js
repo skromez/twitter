@@ -1,28 +1,24 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { connect } from 'react-redux';
-import * as Yup from 'yup';
-import { sendUserTweet } from '../../store/actions/userActions';
+import { sendUserTweet } from '../../store/actions/tweetsActions';
 import Button from '../Button';
 import TweetFormBody from './style';
 
 const TweetForm = ({ onSendTweetSubmitClick }) => {
-  const TweetScheme = Yup.object({
-    message: Yup.string()
-      .max(140, 'Must be 140 characters or less'),
-  });
-
   return (
     <Formik
       initialValues={{
         message: '',
       }}
-      validationSchema={TweetScheme}
       validate={(value) => {
         const errors = [];
         const hashtags = value.message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
         if (!value.message) {
           errors.push('You must provide message');
+        }
+        if (value.message.length > 140) {
+          errors.push('Message should not be more than 140 characters');
         }
         if (!hashtags) {
           errors.push('You must provide hashtags');
@@ -42,10 +38,8 @@ const TweetForm = ({ onSendTweetSubmitClick }) => {
           message: errors,
         } : undefined;
       }}
-      onSubmit={(value, { resetForm }) => {
-        const res = value.message.trim().split(' ');
-        const message = res.filter((item) => item[0] !== '#').join(' ');
-        const hashtags = value.message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
+      onSubmit={({ message }, { resetForm }) => {
+        const hashtags = message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
         onSendTweetSubmitClick({ message, hashtags });
         resetForm({ message: '' });
       }}

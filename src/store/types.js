@@ -8,9 +8,14 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 
-export const SET_USER_REQUEST = 'SET_USER_REQUEST';
 export const SET_USER = 'SET_USER';
 export const RESET_USER = 'RESET_USER';
+
+export const GET_USER_REQUEST = 'GET_USER_REQUEST';
+export const GET_USER = 'GET_USER';
+
+export const GET_USER_TWEETS = 'GET_USER_TWEETS';
+
 
 export const SEND_TWEET_REQUEST = 'SEND_TWEET_REQUEST';
 export const SEND_TWEET_SUCCESS = 'SEND_TWEET_SUCCESS';

@@ -29,6 +29,10 @@ export const HeaderContainer = styled(Container)`
    color: var(--blue);
    font-weight: 700;
    margin-left: 20px;
+   
+   a {
+    display: none;
+   }
   }
   
   .header__avatar {

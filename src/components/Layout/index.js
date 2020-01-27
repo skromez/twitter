@@ -13,7 +13,7 @@ const Layout = ({ isLoggedIn, login }) => (
       <Route exact path="/user/">
         <Redirect to="/user/skromez" />
       </Route>
-      <Route path="/user/:id" component={UserPage} />
+      <Route path="/user/:id" render={({ match }) => <UserPage match={match} />} />
       <Route exact path="/">
         {isLoggedIn ? (
           <Redirect to={`/user/${login}`}>
