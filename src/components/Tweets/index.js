@@ -15,8 +15,8 @@ const Tweets = ({ tweetAmount, loading }) => (
   </SkeletonTheme>
 );
 
-const mapStateToProps = ({ user }) => ({
-  tweetAmount: user.posts.total,
+const mapStateToProps = ({ user, tweets }) => ({
+  tweetAmount: tweets.tweets.total,
   loading: user.loading,
 });
 

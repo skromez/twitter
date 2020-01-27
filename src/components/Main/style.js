@@ -20,6 +20,7 @@ export const MainContainer = styled(Container)`
   .feed_tweets {
     margin-top: 20px;
     min-width: 670px;
+    min-height: 520px;
   }
 
   @media (max-width: 850px) {

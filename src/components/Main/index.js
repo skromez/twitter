@@ -8,8 +8,9 @@ import Tweet from '../Tweet';
 import Join from '../Join';
 import TweetForm from '../TweetForm';
 import { getOthersData } from '../../store/actions/userActions';
+import { deleteUserTweet } from '../../store/actions/tweetsActions';
 
-const TweetList = ({ tweets, name, userLogin }) => {
+const TweetList = ({ tweets, name, userLogin, onDeleteTweetClick }) => {
   const renderItems = (arr) => {
     return arr.reverse().map((item) => {
       const {
@@ -20,6 +21,8 @@ const TweetList = ({ tweets, name, userLogin }) => {
       } = item;
       return (
         <Tweet
+          onDelete={() => onDeleteTweetClick(id)}
+          id={id}
           key={id}
           text={message}
           name={name}
@@ -46,10 +49,9 @@ class Main extends Component {
   }
 
   render() {
-    const { isLoggedIn, login, posts, tweets, name, userLogin, loading, match: { params: { id } } } = this.props;
+    const { onDeleteTweetClick, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } } } = this.props;
     return (
       <SkeletonTheme color="#e6ecf0">
-        {console.log('tweets: ', tweets)}
         <MainBody>
           <MainContainer size="normal" padding="normal">
             <Profile />
@@ -59,7 +61,12 @@ class Main extends Component {
                   {id === login ? <TweetForm /> : null}
                   <Tweets />
                   <div className="feed_tweets">
-                    <TweetList name={name} tweets={tweets} userLogin={userLogin} />
+                    <TweetList
+                      onDeleteTweetClick={onDeleteTweetClick}
+                      name={name}
+                      tweets={tweets}
+                      userLogin={userLogin}
+                    />
                   </div>
                 </div>
                 {isLoggedIn ? null : <Join />}
@@ -84,6 +91,7 @@ const mapStateToProps = ({ user, tweets }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getUserData: (login) => dispatch(getOthersData(login)),
+  onDeleteTweetClick: (id) => dispatch(deleteUserTweet(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

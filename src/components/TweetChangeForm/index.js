@@ -1,8 +1,11 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import Button from '../Button';
+import { changeUserTweet } from '../../store/actions/tweetsActions';
 
-const TweetChangeForm = ({ text }) => {
+const TweetChangeForm = ({ text, onChangeTweetSubmit, id }) => {
   return (
     <Formik
       initialValues={{
@@ -35,9 +38,9 @@ const TweetChangeForm = ({ text }) => {
           message: errors,
         } : undefined;
       }}
-      onSubmit={({ message }, { resetForm }) => {
-        console.log(message);
-        resetForm({ message: '' });
+      onSubmit={({ message }) => {
+        const hashtags = message.match(/#([a-zA-Z0-9А-Яа-я_]+)/g);
+        onChangeTweetSubmit(id, { message, hashtags });
       }}
     >
       {({
@@ -65,11 +68,23 @@ const TweetChangeForm = ({ text }) => {
               <div key={item} className="form__error">{item}</div>
             )) : null}
           </div>
-          <Button type="submit" className="form__button" filled="true">Save</Button>
+          <Button
+            type="submit"
+            className="form__button"
+            filled="true"
+          >
+            Save
+          </Button>
         </form>
       )}
     </Formik>
   );
 };
 
-export default TweetChangeForm;
+
+const mapDispatchToProps = (dispatch) => ({
+  onChangeTweetSubmit: (id, info) => dispatch(changeUserTweet(id, info)),
+});
+
+
+export default connect(null, mapDispatchToProps)(TweetChangeForm);
