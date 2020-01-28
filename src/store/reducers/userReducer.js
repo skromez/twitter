@@ -40,11 +40,6 @@ const initialState = {
   signUpError: null,
   loginError: null,
   tweetError: null,
-  posts: {
-    total: 0,
-    page: 0,
-    items: [],
-  },
 };
 
 const userReducer = (state = initialState, action) => {

@@ -23,3 +23,7 @@ export const SEND_TWEET_FAIL = 'SEND_TWEET_FAIL';
 
 export const UPDATE_TWEETS = 'UPDATE_TWEETS';
 export const TOGGLE_EDIT_TWEET = 'TOGGLE_EDIT_TWEET';
+export const TOGGLE_TWEET_MODAL = 'TOGGLE_TWEET_MODAL';
+
+export const LIKE_TWEET = 'LIKE_TWEET';
+export const UNLIKE_TWEET = 'UNLIKE_TWEET';

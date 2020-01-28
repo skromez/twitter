@@ -8,9 +8,23 @@ import Data from '../Data';
 import Like from '../Like';
 import TweetChangeForm from '../TweetChangeForm';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
-import { toggleEditTweet } from '../../store/actions/tweetsActions';
+import { likeUserTweet, toggleEditTweet } from '../../store/actions/tweetsActions';
+import { tweetModal } from '../../store/actions/tweetsActions';
 
-const Tweet = ({ text, name, login, date, likeAmount = 0, onDelete, id, isVisible, onEditTweetClick, userLogin }) => {
+const Tweet = ({
+  text,
+  name,
+  login,
+  date,
+  likeAmount = 0,
+  onDelete,
+  id,
+  isVisible,
+  onEditTweetClick,
+  userLogin,
+  onTweetModalLoad,
+  onTweetLikeClick,
+}) => {
   const { id: userId } = useParams();
   return (
     <TweetBody>
@@ -45,8 +59,13 @@ const Tweet = ({ text, name, login, date, likeAmount = 0, onDelete, id, isVisibl
             </>
           ) : null}
         </div>
-        {isVisible === id ? <TweetChangeForm id={id} text={text} /> : <p className="tweet__text">{text}</p>}
-        <Like amount={likeAmount} fill="none" stroke="#657786" />
+        {isVisible === id ? <TweetChangeForm id={id} text={text} /> : <p onClick={() => onTweetModalLoad(id)} className="tweet__text">{text}</p>}
+        <Like
+          handleClick={() => onTweetLikeClick(id)}
+          amount={likeAmount}
+          fill="none"
+          stroke="#657786"
+        />
       </div>
     </TweetBody>
   );
@@ -59,6 +78,8 @@ const mapStateToProps = ({ tweets, user }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onEditTweetClick: (id) => dispatch(toggleEditTweet(id)),
+  onTweetModalLoad: (id) => dispatch(tweetModal(id)),
+  onTweetLikeClick: (id) => dispatch(likeUserTweet(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tweet);

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import ProfileBody from './style';
@@ -8,7 +9,9 @@ import UserInfo from '../UserInfo';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
 
 
-const Profile = ({ login, name, location, loading }) => {
+const Profile = ({ login, name, location, loading, date }) => {
+  const format = 'MMMM YYYY';
+  const userCreatedAt = moment(date).format(format);
   return (
     <SkeletonTheme color="#e6ecf0">
       <ProfileBody>
@@ -23,7 +26,7 @@ const Profile = ({ login, name, location, loading }) => {
             login={login}
           />
         )}
-        <UserInfo text="Joined September 2013" icon="calendar" />
+        <UserInfo text={`Joined ${userCreatedAt}`} icon="calendar" />
         <UserInfo text={location} icon="arrow" />
       </ProfileBody>
     </SkeletonTheme>
@@ -33,6 +36,7 @@ const Profile = ({ login, name, location, loading }) => {
 const mapStateToProps = ({ user }) => ({
   login: user.otherUser.login,
   name: `${user.otherUser.firstName} ${user.otherUser.lastName}`,
+  date: user.otherUser.createdAt,
   location: user.otherUser.location,
   loading: user.loading,
 });

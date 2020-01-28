@@ -24,7 +24,7 @@ const TweetModalBody = styled.section`
   .tweet__data {
     margin-top: 25px;
 
-    img {
+    svg {
       display: none;
     }
   }
@@ -47,6 +47,7 @@ const TweetModalBody = styled.section`
 
   .likes__amount {
     margin-right: 15px;
+    margin-left: 5px;
     font-weight: 700;
     font-size: 14px;
     line-height: 16px;
@@ -54,6 +55,7 @@ const TweetModalBody = styled.section`
     color: var(--black);
 
     span {
+      margin-left: 5px;
       font-weight: 400;
       color: var(--gray);
     }

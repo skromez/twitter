@@ -3,8 +3,11 @@ import {
   SEND_TWEET_FAIL,
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
-  UPDATE_TWEETS,
   TOGGLE_EDIT_TWEET,
+  TOGGLE_TWEET_MODAL,
+  UPDATE_TWEETS,
+  LIKE_TWEET,
+  UNLIKE_TWEET,
 } from '../types';
 import axiosInstance from '../../utils/axios';
 
@@ -37,6 +40,27 @@ export const toggleEditTweet = (id) => ({
   payload: id,
 });
 
+const likeTweet = (id) => ({
+  type: LIKE_TWEET,
+  payload: id,
+});
+
+const unlikeTweet = (id) => ({
+  type: UNLIKE_TWEET,
+  payload: id,
+});
+
+const clickLikeTweet = (id) => async (dispatch) => {
+  try {
+    await axiosInstance.post(`tweet/${id}/like`);
+    dispatch(likeTweet(id));
+  } catch (err) {
+    await axiosInstance.delete(`tweet/${id}/like`);
+    dispatch(unlikeTweet(id));
+    console.log(err);
+  }
+};
+
 const deleteTweet = (id) => async () => {
   try {
     await axiosInstance.delete(`/tweet/${id}`);
@@ -52,6 +76,11 @@ const changeTweet = (id, info) => async () => {
     console.log(err);
   }
 };
+
+const toggleTweetModal = (tweet) => ({
+  type: TOGGLE_TWEET_MODAL,
+  payload: tweet,
+});
 
 export const sendUserTweet = (tweet) => async (dispatch) => {
   dispatch(sendTweetRequest());
@@ -79,14 +108,21 @@ export const changeUserTweet = (id, { message, hashtags }) => async (dispatch, g
   }
 };
 
-export const deleteUserTweet = (id) => async (dispatch, getStore) => {
-  try {
-    const { tweets: { tweets: { items } } } = getStore();
-    const idx = items.findIndex((item) => item.id === id);
-    const newArray = [...items.slice(0, idx), ...items.slice(idx + 1)];
-    dispatch(updateTweets(newArray));
-    dispatch(deleteTweet(id));
-  } catch (err) {
-    console.log(err);
-  }
+export const deleteUserTweet = (id) => (dispatch, getStore) => {
+  const { tweets: { tweets: { items } } } = getStore();
+  const idx = items.findIndex((item) => item.id === id);
+  const newArray = [...items.slice(0, idx), ...items.slice(idx + 1)];
+  dispatch(updateTweets(newArray));
+  dispatch(deleteTweet(id));
+};
+
+export const tweetModal = (id) => (dispatch, getStore) => {
+  const { tweets: { tweets: { items } } } = getStore();
+  const idx = items.findIndex((item) => item.id === id);
+  const foundItem = items[idx];
+  dispatch(toggleTweetModal(foundItem));
+};
+
+export const likeUserTweet = (id) => (dispatch) => {
+  dispatch(clickLikeTweet(id));
 };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
-import TweetModal from './TweetModal';
 import Login from './Login';
 import Layout from './Layout';
 import SignUpModal from './SignUpModal';
@@ -25,7 +24,6 @@ class App extends Component {
       <div className="app">
         <Router>
           <Layout />
-          {false && <TweetModal />}
         </Router>
         {showSignUpModal && <SignUpModal />}
         {showLoginModal && <Login />}
@@ -34,9 +32,10 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ ui, user }) => ({
+const mapStateToProps = ({ ui, user, tweets }) => ({
   showLoginModal: ui.modal === 'login',
   showSignUpModal: ui.modal === 'signUp',
+  tweets: tweets.tweets.items,
   dataLoading: user.dataLoading,
   isLoggedIn: Boolean(user.info.id),
 });

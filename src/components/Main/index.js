@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import moment from 'moment';
 import { MainBody, MainContainer } from './style';
 import Profile from '../Profile';
 import Tweets from '../Tweets';
@@ -9,47 +10,51 @@ import Join from '../Join';
 import TweetForm from '../TweetForm';
 import { getOthersData } from '../../store/actions/userActions';
 import { deleteUserTweet } from '../../store/actions/tweetsActions';
+import TweetModal from '../TweetModal/style';
 
-const TweetList = ({ tweets, name, userLogin, onDeleteTweetClick }) => {
-  const renderItems = (arr) => {
-    return arr.reverse().map((item) => {
-      const {
-        message,
-        date = '24 Jan',
-        likes,
-        id,
-      } = item;
-      return (
-        <Tweet
-          onDelete={() => onDeleteTweetClick(id)}
-          id={id}
-          key={id}
-          text={message}
-          name={name}
-          login={userLogin}
-          date={date}
-          likeAmount={likes}
-        />
-      );
-    });
-  };
+const TweetList = ({
+  tweets, name, userLogin, onDeleteTweetClick,
+}) => {
+  const renderItems = (arr) => arr.reverse().map((item) => {
+    const format = 'DD MMM';
+    const postCreatedAt = moment(item.createdAt).format(format);
+    const {
+      message,
+      likes,
+      id,
+    } = item;
+    return (
+      <Tweet
+        onDelete={() => onDeleteTweetClick(id)}
+        id={id}
+        key={id}
+        text={message}
+        name={name}
+        login={userLogin}
+        date={postCreatedAt}
+        likeAmount={likes}
+      />
+    );
+  });
   const items = renderItems(tweets);
   return (
     <>
       {items}
+      <TweetModal />
     </>
   );
 };
 
 class Main extends Component {
-
   componentDidMount() {
     const { getUserData, match: { params: { id } } } = this.props;
     getUserData(id);
   }
 
   render() {
-    const { onDeleteTweetClick, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } } } = this.props;
+    const {
+      onDeleteTweetClick, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } },
+    } = this.props;
     return (
       <SkeletonTheme color="#e6ecf0">
         <MainBody>

@@ -6,25 +6,28 @@ import Error from '../../pages/Error';
 import UserPage from '../../pages/UserPage';
 import IndexPage from '../../pages/IndexPage';
 
-const Layout = ({ isLoggedIn, login }) => (
-  <>
-    <Header />
-    <Switch>
-      <Route exact path="/user/">
-        <Redirect to="/user/skromez" />
-      </Route>
-      <Route path="/user/:id" render={({ match }) => <UserPage match={match} />} />
-      <Route exact path="/">
-        {isLoggedIn ? (
-          <Redirect to={`/user/${login}`}>
-            <UserPage />
-          </Redirect>
-        ) : <IndexPage />}
-      </Route>
-      <Route path={'/*/*' && '/*/'} component={Error} />
-    </Switch>
-  </>
-);
+
+const Layout = ({ isLoggedIn, login }) => {
+  return (
+    <>
+      <Header />
+      <Switch>
+        <Route exact path="/user/">
+          <Redirect to="/user/skromez" />
+        </Route>
+        <Route path="/user/:id" render={({ match }) => <UserPage match={match} />} />
+        <Route exact path="/">
+          {isLoggedIn ? (
+            <Redirect to={`/user/${login}`}>
+              <UserPage />
+            </Redirect>
+          ) : <IndexPage />}
+        </Route>
+        <Route path={'/*/*' && '/*/'} component={Error} />
+      </Switch>
+    </>
+  );
+}
 
 const mapStateToProps = ({ user: { info } }) => ({
   isLoggedIn: Boolean(info.id),

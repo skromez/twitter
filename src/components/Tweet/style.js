@@ -56,6 +56,7 @@ const TweetBody = styled.div`
     margin: 0;
     background: transparent;
     color: var(--blue);
+
     
     &-change {
       display: none;
