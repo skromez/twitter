@@ -5,14 +5,23 @@ import {
   GET_USER_TWEETS,
   UPDATE_TWEETS,
   TOGGLE_EDIT_TWEET,
-  TOGGLE_TWEET_MODAL,
-  LIKE_TWEET,
-  UNLIKE_TWEET
+  RESET_DETAILED_TWEET,
+  ADD_DETAILED_TWEET,
 } from '../types';
 
 const initialState = {
   editTweet: false,
-  toggleTweetModal: null,
+  detailedTweet: {
+    deletedAt: null,
+    hashtags: [],
+    _id: null,
+    user: null,
+    message: null,
+    createdAt: null,
+    updatedAt: null,
+    author: null,
+    likes: [],
+  },
   tweets: {
     total: 0,
     page: 0,
@@ -65,42 +74,18 @@ const tweetsReducer = (state = initialState, action) => {
         ...state,
         editTweet: state.editTweet === action.payload ? null : action.payload,
       };
-    case LIKE_TWEET:
+    case ADD_DETAILED_TWEET:
       return {
         ...state,
-        tweets: {
-          ...state.tweets,
-          items: [...state.tweets.items.map((item) => {
-            if (item.id === action.payload) {
-              return {
-                ...item,
-                likes: item.likes + 1,
-              };
-            }
-            return item;
-          })],
+        detailedTweet: {
+          ...state.detailedTweet,
+          ...action.payload,
         },
       };
-    case UNLIKE_TWEET:
+    case RESET_DETAILED_TWEET:
       return {
         ...state,
-        tweets: {
-          ...state.tweets,
-          items: [...state.tweets.items.map((item) => {
-            if (item.id === action.payload) {
-              return {
-                ...item,
-                likes: item.likes - 1,
-              };
-            }
-            return item;
-          })],
-        },
-      }
-    case TOGGLE_TWEET_MODAL:
-      return {
-        ...state,
-        toggleTweetModal: state.toggleTweetModal === action.payload ? null : action.payload,
+        detailedTweet: state.detailedTweet,
       };
     default:
       return state;

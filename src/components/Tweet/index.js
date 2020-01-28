@@ -8,8 +8,7 @@ import Data from '../Data';
 import Like from '../Like';
 import TweetChangeForm from '../TweetChangeForm';
 import UserAvatar from '../../assets/images/profile/avatar.jpg';
-import { likeUserTweet, toggleEditTweet } from '../../store/actions/tweetsActions';
-import { tweetModal } from '../../store/actions/tweetsActions';
+import { likeUserTweet, toggleEditTweet, tweetModal } from '../../store/actions/tweetsActions';
 
 const Tweet = ({
   text,
@@ -27,7 +26,7 @@ const Tweet = ({
 }) => {
   const { id: userId } = useParams();
   return (
-    <TweetBody>
+    <TweetBody onClick={() => onTweetModalLoad(id)}>
       <Avatar avatar={UserAvatar} className="tweet__avatar" size="normal" />
       <div className="tweet__info">
         <div className="tweet__container">
@@ -42,7 +41,10 @@ const Tweet = ({
             <>
               <div className="tweet__buttons">
                 <button
-                  onClick={() => onEditTweetClick(id)}
+                  onClick={(evt) => {
+                    evt.stopPropagation();
+                    onEditTweetClick(id);
+                  }}
                   className="tweet__button tweet__button-change"
                   type="button"
                 >
@@ -51,7 +53,10 @@ const Tweet = ({
                 <button
                   className="tweet__button tweet__button-delete"
                   type="button"
-                  onClick={onDelete}
+                  onClick={(evt) => {
+                    evt.stopPropagation();
+                    onDelete();
+                  }}
                 >
                   <i className="fas fa-trash-alt"></i>
                 </button>
@@ -59,9 +64,12 @@ const Tweet = ({
             </>
           ) : null}
         </div>
-        {isVisible === id ? <TweetChangeForm id={id} text={text} /> : <p onClick={() => onTweetModalLoad(id)} className="tweet__text">{text}</p>}
+        {isVisible === id ? <TweetChangeForm id={id} text={text} /> : <p className="tweet__text">{text}</p>}
         <Like
-          handleClick={() => onTweetLikeClick(id)}
+          handleClick={(evt) => {
+            evt.stopPropagation();
+            onTweetLikeClick(id);
+          }}
           amount={likeAmount}
           fill="none"
           stroke="#657786"

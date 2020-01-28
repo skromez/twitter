@@ -10,14 +10,16 @@ import Join from '../Join';
 import TweetForm from '../TweetForm';
 import { getOthersData } from '../../store/actions/userActions';
 import { deleteUserTweet } from '../../store/actions/tweetsActions';
-import TweetModal from '../TweetModal/style';
 
 const TweetList = ({
   tweets, name, userLogin, onDeleteTweetClick,
 }) => {
-  const renderItems = (arr) => arr.reverse().map((item) => {
-    const format = 'DD MMM';
-    const postCreatedAt = moment(item.createdAt).format(format);
+  const renderItems = (arr) => arr.sort((a, b) => {
+    const aData = moment(a.createdAt).format('DD MMM').valueOf();
+    const bData = moment(b.createdAt).format('DD MMM').valueOf();
+    return bData - aData;
+  }).map((item) => {
+    const postCreatedAt = moment(item.createdAt).format('DD MMM');
     const {
       message,
       likes,
@@ -40,7 +42,6 @@ const TweetList = ({
   return (
     <>
       {items}
-      <TweetModal />
     </>
   );
 };
@@ -53,7 +54,7 @@ class Main extends Component {
 
   render() {
     const {
-      onDeleteTweetClick, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } },
+      onDeleteTweetClick, isToggled, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } },
     } = this.props;
     return (
       <SkeletonTheme color="#e6ecf0">
@@ -71,6 +72,7 @@ class Main extends Component {
                       name={name}
                       tweets={tweets}
                       userLogin={userLogin}
+                      isToggled={isToggled}
                     />
                   </div>
                 </div>
@@ -92,6 +94,7 @@ const mapStateToProps = ({ user, tweets }) => ({
   name: `${user.otherUser.firstName} ${user.otherUser.lastName}`,
   tweets: tweets.tweets.items,
   loading: user.loading,
+  isToggled: tweets.toggleTweetModal,
 });
 
 const mapDispatchToProps = (dispatch) => ({

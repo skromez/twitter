@@ -4,18 +4,18 @@ import Cover from '../components/Cover';
 import Main from '../components/Main';
 import TweetModal from '../components/TweetModal';
 
-const UserPage = ({ match, tweetInfo }) => {
+const UserPage = ({ match, isDetailedTweetModalOpen }) => {
   return (
     <>
       <Cover />
       <Main match={match} />
-      { tweetInfo && <TweetModal tweetInfo={tweetInfo} /> }
+      {isDetailedTweetModalOpen && <TweetModal /> }
     </>
   );
 };
 
-const mapStateToProps = ({ tweets }) => ({
-  tweetInfo: tweets.toggleTweetModal,
+const mapStateToProps = ({ ui }) => ({
+  isDetailedTweetModalOpen: ui.modal === 'tweet',
 });
 
 

@@ -4,11 +4,10 @@ import {
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
   TOGGLE_EDIT_TWEET,
-  TOGGLE_TWEET_MODAL,
   UPDATE_TWEETS,
-  LIKE_TWEET,
-  UNLIKE_TWEET,
+  ADD_DETAILED_TWEET, RESET_DETAILED_TWEET,
 } from '../types';
+import { toggleModal } from './uiActions';
 import axiosInstance from '../../utils/axios';
 
 export const getUserTweets = (tweets) => ({
@@ -40,23 +39,24 @@ export const toggleEditTweet = (id) => ({
   payload: id,
 });
 
-const likeTweet = (id) => ({
-  type: LIKE_TWEET,
-  payload: id,
-});
+const handleTweetLike = (data, getState, dispatch) => {
+  const { tweets: { tweets: { items } } } = getState();
 
-const unlikeTweet = (id) => ({
-  type: UNLIKE_TWEET,
-  payload: id,
-});
+  const copiedTweets = JSON.parse(JSON.stringify(items));
+  const tweetIndex = copiedTweets.findIndex((tweet) => tweet.id === data.id);
+  copiedTweets[tweetIndex] = data;
+  dispatch(updateTweets(copiedTweets));
+};
 
-const clickLikeTweet = (id) => async (dispatch) => {
+const clickLikeTweet = (id) => async (dispatch, getState) => {
   try {
-    await axiosInstance.post(`tweet/${id}/like`);
-    dispatch(likeTweet(id));
+    const { data } = await axiosInstance.post(`tweet/${id}/like`);
+    handleTweetLike(data, getState, dispatch);
   } catch (err) {
-    await axiosInstance.delete(`tweet/${id}/like`);
-    dispatch(unlikeTweet(id));
+    if (err.response.data.statusCode === 409) {
+      const { data } = await axiosInstance.delete(`tweet/${id}/like`);
+      handleTweetLike(data, getState, dispatch);
+    }
     console.log(err);
   }
 };
@@ -76,11 +76,6 @@ const changeTweet = (id, info) => async () => {
     console.log(err);
   }
 };
-
-const toggleTweetModal = (tweet) => ({
-  type: TOGGLE_TWEET_MODAL,
-  payload: tweet,
-});
 
 export const sendUserTweet = (tweet) => async (dispatch) => {
   dispatch(sendTweetRequest());
@@ -116,13 +111,36 @@ export const deleteUserTweet = (id) => (dispatch, getStore) => {
   dispatch(deleteTweet(id));
 };
 
-export const tweetModal = (id) => (dispatch, getStore) => {
-  const { tweets: { tweets: { items } } } = getStore();
-  const idx = items.findIndex((item) => item.id === id);
-  const foundItem = items[idx];
-  dispatch(toggleTweetModal(foundItem));
+export const addDetailedTweet = (tweet) => ({ type: ADD_DETAILED_TWEET, payload: tweet });
+export const resetDetailedTweet = () => ({ type: RESET_DETAILED_TWEET });
+
+export const tweetModal = (id) => async (dispatch) => {
+  try {
+    const { data } = await axiosInstance.get(`/tweet/${id}`);
+    dispatch(addDetailedTweet(data));
+    dispatch(toggleModal('tweet'));
+  } catch (err) {
+    // dispatch(toggleTweetModal());
+  }
 };
 
 export const likeUserTweet = (id) => (dispatch) => {
   dispatch(clickLikeTweet(id));
+};
+
+export const likeDetailedTweet = (id) => async (dispatch, getState) => {
+  try {
+    const { data: updatedTweet } = await axiosInstance.post(`tweet/${id}/like`);
+    const { data } = await axiosInstance.get(`/tweet/${id}`);
+    dispatch(addDetailedTweet(data));
+    handleTweetLike(updatedTweet, getState, dispatch);
+  } catch (err) {
+    if (err.response.data.statusCode === 409) {
+      const { data: updatedTweet } = await axiosInstance.delete(`tweet/${id}/like`);
+      const { data } = await axiosInstance.get(`/tweet/${id}`);
+      dispatch(addDetailedTweet(data));
+      handleTweetLike(updatedTweet, getState, dispatch);
+    }
+    console.log(err);
+  }
 };

@@ -4,4 +4,3 @@ export const toggleModal = (modalType) => ({
   type: TOGGLE_MODAL,
   payload: modalType,
 });
-
