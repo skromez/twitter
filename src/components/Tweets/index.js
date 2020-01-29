@@ -16,7 +16,7 @@ const Tweets = ({ tweetAmount, loading }) => (
 );
 
 const mapStateToProps = ({ user, tweets }) => ({
-  tweetAmount: tweets.tweets.total,
+  tweetAmount: tweets.tweets.items.length,
   loading: user.loading,
 });
 

@@ -1,6 +1,8 @@
 import axiosInstance from '../../utils/axios';
 
 import {
+  GET_USER,
+  GET_USER_REQUEST,
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -10,13 +12,9 @@ import {
   SIGNUP_NOTIFICATION,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
-  GET_USER_REQUEST,
-  GET_USER,
 } from '../types';
 
-import {
-  getUserTweets,
-} from './tweetsActions';
+import { getUserTweets, } from './tweetsActions';
 import { toggleModal } from './uiActions';
 
 
@@ -102,7 +100,10 @@ export const signUpUser = (credentials) => async (dispatch, getStore) => {
     dispatch(signUpSuccess());
     setTimeout(() => {
       const { ui } = getStore();
-      if (ui.modal === 'signUp') dispatch(toggleModal('signUp'));
+      if (ui.modal === 'signUp') {
+        dispatch(toggleModal('signUp'));
+        dispatch(signUpNotification());
+      }
     }, 3000);
   } catch (err) {
     dispatch(signUpFail(err.response.data.message));

@@ -37,6 +37,7 @@ const TweetModalBody = styled.section`
 
   .likes {
     margin-top: 25px;
+    min-height: 40px;
 
     display: flex;   align-items: center;
 

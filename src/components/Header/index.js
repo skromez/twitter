@@ -1,31 +1,80 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Formik } from 'formik';
+import queryString from 'query-string';
 import { HeaderBody, HeaderContainer } from './style';
+import Input from '../Input';
 import Logo from '../Logo';
 import Button from '../Button';
 import { toggleModal } from '../../store/actions/uiActions';
 import Avatar from '../Avatar';
-import User from '../User';
-import UserAvatar from '../../assets/images/profile/avatar.jpg';
-import { signOutUser } from '../../store/actions/userActions';
+import UserAvatar from '../../assets/images/profile/avatar.svg';
+import { getOthersData, signOutUser } from '../../store/actions/userActions';
+import { searchTweetsByHashtag } from '../../store/actions/searchActions';
 
-const Header = (props) => {
-  const { info, toggleLogin, toggleSignUp, onSignOutClick, isLoggedIn } = props;
+const Header = ({ info, toggleLogin, toggleSignUp, onSignOutClick, isLoggedIn, getUserData, onSearchFormSubmit }) => {
+  const history = useHistory();
+  const location = useLocation();
+  const parsed = queryString.parse(location.search);
+
+  useEffect(() => {
+    if (parsed.term) onSearchFormSubmit(parsed.term);
+  }, []);
+
   return (
     <HeaderBody className="header">
       <HeaderContainer size="normal" padding="normal">
         <Logo />
+        <Formik
+          initialValues={{
+            search: parsed.term ? parsed.term : '',
+          }}
+          onSubmit={({ search }, { resetForm }) => {
+            console.log(search);
+            onSearchFormSubmit(search);
+            history.push(`/search?term=${search}`);
+            resetForm({ search: null });
+          }}
+        >
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+          }) => (
+            <form className="header__form" onSubmit={handleSubmit}>
+              <Input
+                defaultValue={values.search}
+                name="search"
+                type="text"
+                onBlur={handleBlur}
+                value={values.search}
+                onChange={handleChange}
+                placeholder="Search in Gucciter"
+                className="header__input"
+              />
+            </form>
+          )}
+        </Formik>
         <div className="header__wrapper">
           {isLoggedIn ? (
             <>
               <Avatar avatar={UserAvatar} className="header__avatar" size="normal" />
-              <User name={info.firstName} className="header__username" />
+              <Link
+                onClick={() => {
+                  getUserData(info.login);
+                }}
+                to={`/user/${info.login}`}
+              >
+                <div className="header__username">{info.firstName}</div>
+              </Link>
               <button
                 type="button"
                 onClick={onSignOutClick}
                 className="header__button header__button--logout"
               >
-                <i className="fas fa-sign-out-alt header__icon"/>
+                <i className="fas fa-sign-out-alt header__icon" />
               </button>
             </>
           )
@@ -57,7 +106,7 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = ({ user: { info } }) => ({
+const mapStateToProps = ({ user: { info }, search }) => ({
   isLoggedIn: Boolean(info.id),
   info,
 });
@@ -66,6 +115,8 @@ const mapDispatchToProps = (dispatch) => ({
   toggleLogin: () => dispatch(toggleModal('login')),
   toggleSignUp: () => dispatch(toggleModal('signUp')),
   onSignOutClick: () => dispatch(signOutUser()),
+  getUserData: (login) => dispatch(getOthersData(login)),
+  onSearchFormSubmit: (term) => dispatch(searchTweetsByHashtag(term)),
 });
 
 

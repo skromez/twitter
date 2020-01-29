@@ -7,7 +7,7 @@ import TweetBody from './style';
 import Data from '../Data';
 import Like from '../Like';
 import TweetChangeForm from '../TweetChangeForm';
-import UserAvatar from '../../assets/images/profile/avatar.jpg';
+import UserAvatar from '../../assets/images/profile/avatar.svg';
 import { likeUserTweet, toggleEditTweet, tweetModal } from '../../store/actions/tweetsActions';
 
 const Tweet = ({

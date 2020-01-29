@@ -1,11 +1,12 @@
 import {
+  ADD_DETAILED_TWEET,
   GET_USER_TWEETS,
+  RESET_DETAILED_TWEET,
   SEND_TWEET_FAIL,
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
   TOGGLE_EDIT_TWEET,
   UPDATE_TWEETS,
-  ADD_DETAILED_TWEET, RESET_DETAILED_TWEET,
 } from '../types';
 import { toggleModal } from './uiActions';
 import axiosInstance from '../../utils/axios';
@@ -29,7 +30,7 @@ const sendTweetFail = (error) => ({
   payload: error,
 });
 
-const updateTweets = (array) => ({
+export const updateTweets = (array) => ({
   type: UPDATE_TWEETS,
   payload: array,
 });
@@ -39,26 +40,13 @@ export const toggleEditTweet = (id) => ({
   payload: id,
 });
 
-const handleTweetLike = (data, getState, dispatch) => {
-  const { tweets: { tweets: { items } } } = getState();
+const handleTweetLike = (data, getStoregetStore, dispatch) => {
+  const { tweets: { tweets: { items } } } = getStoregetStore();
 
   const copiedTweets = JSON.parse(JSON.stringify(items));
   const tweetIndex = copiedTweets.findIndex((tweet) => tweet.id === data.id);
   copiedTweets[tweetIndex] = data;
   dispatch(updateTweets(copiedTweets));
-};
-
-const clickLikeTweet = (id) => async (dispatch, getState) => {
-  try {
-    const { data } = await axiosInstance.post(`tweet/${id}/like`);
-    handleTweetLike(data, getState, dispatch);
-  } catch (err) {
-    if (err.response.data.statusCode === 409) {
-      const { data } = await axiosInstance.delete(`tweet/${id}/like`);
-      handleTweetLike(data, getState, dispatch);
-    }
-    console.log(err);
-  }
 };
 
 const deleteTweet = (id) => async () => {
@@ -91,10 +79,10 @@ export const sendUserTweet = (tweet) => async (dispatch) => {
 export const changeUserTweet = (id, { message, hashtags }) => async (dispatch, getStore) => {
   try {
     const { tweets: { tweets: { items } } } = getStore();
-    const idx = items.reverse().findIndex((item) => item.id === id);
-    const oldItem = items[idx];
+    const tweetIndex = items.reverse().findIndex((item) => item.id === id);
+    const oldItem = items[tweetIndex];
     const newItem = { ...oldItem, message, hashtags };
-    const newArray = [...items.slice(0, idx), newItem, ...items.slice(idx + 1)];
+    const newArray = [...items.slice(0, tweetIndex), newItem, ...items.slice(tweetIndex + 1)];
     dispatch(updateTweets(newArray));
     dispatch(changeTweet(id, { message, hashtags }));
     dispatch(toggleEditTweet(id));
@@ -105,14 +93,18 @@ export const changeUserTweet = (id, { message, hashtags }) => async (dispatch, g
 
 export const deleteUserTweet = (id) => (dispatch, getStore) => {
   const { tweets: { tweets: { items } } } = getStore();
-  const idx = items.findIndex((item) => item.id === id);
-  const newArray = [...items.slice(0, idx), ...items.slice(idx + 1)];
+  const tweetIndex = items.findIndex((item) => item.id === id);
+  const newArray = [...items.slice(0, tweetIndex), ...items.slice(tweetIndex + 1)];
   dispatch(updateTweets(newArray));
   dispatch(deleteTweet(id));
 };
 
-export const addDetailedTweet = (tweet) => ({ type: ADD_DETAILED_TWEET, payload: tweet });
-export const resetDetailedTweet = () => ({ type: RESET_DETAILED_TWEET });
+export const addDetailedTweet = (tweet) => ({
+  type: ADD_DETAILED_TWEET, payload: tweet,
+});
+export const resetDetailedTweet = () => ({
+  type: RESET_DETAILED_TWEET,
+});
 
 export const tweetModal = (id) => async (dispatch) => {
   try {
@@ -120,26 +112,35 @@ export const tweetModal = (id) => async (dispatch) => {
     dispatch(addDetailedTweet(data));
     dispatch(toggleModal('tweet'));
   } catch (err) {
-    // dispatch(toggleTweetModal());
+    console.log(err);
   }
 };
 
-export const likeUserTweet = (id) => (dispatch) => {
-  dispatch(clickLikeTweet(id));
+export const likeUserTweet = (id) => async (dispatch, getStore) => {
+  try {
+    const { data } = await axiosInstance.post(`tweet/${id}/like`);
+    handleTweetLike(data, getStore, dispatch);
+  } catch (err) {
+    if (err.response.data.statusCode === 409) {
+      const { data } = await axiosInstance.delete(`tweet/${id}/like`);
+      handleTweetLike(data, getStore, dispatch);
+    }
+    console.log(err);
+  }
 };
 
-export const likeDetailedTweet = (id) => async (dispatch, getState) => {
+export const likeDetailedTweet = (id) => async (dispatch, getStore) => {
   try {
     const { data: updatedTweet } = await axiosInstance.post(`tweet/${id}/like`);
     const { data } = await axiosInstance.get(`/tweet/${id}`);
     dispatch(addDetailedTweet(data));
-    handleTweetLike(updatedTweet, getState, dispatch);
+    handleTweetLike(updatedTweet, getStore, dispatch);
   } catch (err) {
     if (err.response.data.statusCode === 409) {
       const { data: updatedTweet } = await axiosInstance.delete(`tweet/${id}/like`);
       const { data } = await axiosInstance.get(`/tweet/${id}`);
       dispatch(addDetailedTweet(data));
-      handleTweetLike(updatedTweet, getState, dispatch);
+      handleTweetLike(updatedTweet, getStore, dispatch);
     }
     console.log(err);
   }

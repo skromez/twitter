@@ -9,10 +9,13 @@ export const HeaderBody = styled.header`
 export const HeaderContainer = styled(Container)`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   
   .header__wrapper {
     display: flex;
     align-items: center;
+    min-width: 240px;
+    justify-content: center;
   }
 
   .header__button {
@@ -35,9 +38,18 @@ export const HeaderContainer = styled(Container)`
    }
   }
   
+  .header__form {
+    margin-left: 120px;
+  
+    min-width: 670px;
+  }
+  
+  .header__input {
+    margin-bottom: 0;
+  }
+  
   .header__avatar {
     border-radius: 50px;
-    border: 1px solid var(--gray);
   }
   
   .header__icon {

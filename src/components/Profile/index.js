@@ -6,7 +6,7 @@ import ProfileBody from './style';
 import Avatar from '../Avatar';
 import User from '../User';
 import UserInfo from '../UserInfo';
-import UserAvatar from '../../assets/images/profile/avatar.jpg';
+import UserAvatar from '../../assets/images/profile/avatar.svg';
 
 
 const Profile = ({ login, name, location, loading, date }) => {

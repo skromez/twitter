@@ -1,12 +1,13 @@
 import {
+  ADD_DETAILED_TWEET,
+  GET_USER_TWEETS,
+  RESET_DETAILED_TWEET,
   SEND_TWEET_FAIL,
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
-  GET_USER_TWEETS,
-  UPDATE_TWEETS,
   TOGGLE_EDIT_TWEET,
-  RESET_DETAILED_TWEET,
-  ADD_DETAILED_TWEET,
+  UPDATE_SEARCH,
+  UPDATE_TWEETS
 } from '../types';
 
 const initialState = {
@@ -41,7 +42,6 @@ const tweetsReducer = (state = initialState, action) => {
         ...state,
         tweets: {
           ...state.tweets,
-          total: state.tweets.total + 1,
           items: [
             ...state.tweets.items,
             action.payload,
@@ -63,7 +63,6 @@ const tweetsReducer = (state = initialState, action) => {
         ...state,
         tweets: {
           ...state.tweets,
-          total: state.tweets.items.length > action.payload.length ? state.tweets.total - 1 : state.tweets.total,
           items: [
             ...action.payload,
           ],

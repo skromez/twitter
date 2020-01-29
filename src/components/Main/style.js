@@ -17,7 +17,7 @@ export const MainBody = styled.main`
 export const MainContainer = styled(Container)`
   display: flex;
   
-  .feed_tweets {
+  .feed__tweets {
     margin-top: 20px;
     min-width: 670px;
     min-height: 520px;

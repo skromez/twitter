@@ -61,6 +61,7 @@ const TweetChangeForm = ({ text, onChangeTweetSubmit, id }) => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.message}
+            onClick={(evt) => evt.stopPropagation()}
           />
           <div className="form__wrapper">
             {touched.message && errors.message ? errors.message.map((item) => (
@@ -71,6 +72,7 @@ const TweetChangeForm = ({ text, onChangeTweetSubmit, id }) => {
             type="submit"
             className="form__button"
             filled="true"
+            onClick={(evt) => evt.stopPropagation()}
           >
             Save
           </Button>

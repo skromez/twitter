@@ -5,46 +5,47 @@ import moment from 'moment';
 import { MainBody, MainContainer } from './style';
 import Profile from '../Profile';
 import Tweets from '../Tweets';
+import TweetList from '../TweetList';
 import Tweet from '../Tweet';
 import Join from '../Join';
 import TweetForm from '../TweetForm';
 import { getOthersData } from '../../store/actions/userActions';
 import { deleteUserTweet } from '../../store/actions/tweetsActions';
 
-const TweetList = ({
-  tweets, name, userLogin, onDeleteTweetClick,
-}) => {
-  const renderItems = (arr) => arr.sort((a, b) => {
-    const aData = moment(a.createdAt).format('DD MMM').valueOf();
-    const bData = moment(b.createdAt).format('DD MMM').valueOf();
-    return bData - aData;
-  }).map((item) => {
-    const postCreatedAt = moment(item.createdAt).format('DD MMM');
-    const {
-      message,
-      likes,
-      id,
-    } = item;
-    return (
-      <Tweet
-        onDelete={() => onDeleteTweetClick(id)}
-        id={id}
-        key={id}
-        text={message}
-        name={name}
-        login={userLogin}
-        date={postCreatedAt}
-        likeAmount={likes}
-      />
-    );
-  });
-  const items = renderItems(tweets);
-  return (
-    <>
-      {items}
-    </>
-  );
-};
+// const TweetList = ({
+//  tweets, name, userLogin, onDeleteTweetClick,
+// }) => {
+//   const renderItems = (arr) => arr.sort((a, b) => {
+//     const aData = moment(a.createdAt).valueOf();
+//     const bData = moment(b.createdAt).valueOf();
+//     return bData - aData;
+//   }).map((item) => {
+//     const postCreatedAt = moment(item.createdAt).format('DD MMM');
+//     const {
+//       message,
+//       likes,
+//       id,
+//     } = item;
+//     return (
+//       <Tweet
+//         onDelete={() => onDeleteTweetClick(id)}
+//         id={id}
+//         key={id}
+//         text={message}
+//         name={name}
+//         login={userLogin}
+//         date={postCreatedAt}
+//         likeAmount={likes}
+//       />
+//     );
+//   });
+//   const items = renderItems(tweets);
+//   return (
+//     <>
+//       {items}
+//     </>
+//   );
+// };
 
 class Main extends Component {
   componentDidMount() {
@@ -54,7 +55,7 @@ class Main extends Component {
 
   render() {
     const {
-      onDeleteTweetClick, isToggled, isLoggedIn, login, tweets, name, userLogin, loading, match: { params: { id } },
+      onDeleteTweetClick, isLoggedIn, login, tweets, loading, match: { params: { id } },
     } = this.props;
     return (
       <SkeletonTheme color="#e6ecf0">
@@ -66,13 +67,10 @@ class Main extends Component {
                 <div className="feed">
                   {id === login ? <TweetForm /> : null}
                   <Tweets />
-                  <div className="feed_tweets">
+                  <div className="feed__tweets">
                     <TweetList
                       onDeleteTweetClick={onDeleteTweetClick}
-                      name={name}
                       tweets={tweets}
-                      userLogin={userLogin}
-                      isToggled={isToggled}
                     />
                   </div>
                 </div>
@@ -90,11 +88,8 @@ class Main extends Component {
 const mapStateToProps = ({ user, tweets }) => ({
   isLoggedIn: Boolean(user.info.id),
   login: user.info.login,
-  userLogin: user.otherUser.login,
-  name: `${user.otherUser.firstName} ${user.otherUser.lastName}`,
   tweets: tweets.tweets.items,
   loading: user.loading,
-  isToggled: tweets.toggleTweetModal,
 });
 
 const mapDispatchToProps = (dispatch) => ({

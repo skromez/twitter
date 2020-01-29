@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 import Avatar from '../Avatar';
 import User from '../User';
 import Data from '../Data';
-import UserAvatar from '../../assets/images/profile/avatar.jpg';
+import UserAvatar from '../../assets/images/profile/avatar.svg';
 import Like from '../Like';
 import Modal from '../Modal';
 import TweetModalBody from './style';
 import { toggleModal } from '../../store/actions/uiActions';
 import { likeDetailedTweet, resetDetailedTweet } from '../../store/actions/tweetsActions';
+import { Link } from 'react-router-dom';
+import { getOthersData } from '../../store/actions/userActions';
 
-const TweetModal = ({ detailedTweetInfo, closeTweetModal, onTweetLikeClick }) => {
+const TweetModal = ({ detailedTweetInfo, closeTweetModal, onTweetLikeClick, getUserData }) => {
   // console.log(tweetInfo);
   const format = 'HH:mm - DD MMM YYYY';
   const postCreatedAt = moment(detailedTweetInfo.createdAt).format(format);
@@ -40,12 +42,20 @@ const TweetModal = ({ detailedTweetInfo, closeTweetModal, onTweetLikeClick }) =>
             <span>Likes</span>
           </p>
           {detailedTweetInfo.likes.map((likeAuthor) => (
-            <Avatar
+            <Link
+              onClick={() => {
+                getUserData(likeAuthor.login);
+                closeTweetModal();
+              }}
               key={likeAuthor.id}
-              className="tweet__thumb"
-              avatar={likeAuthor.avatar || 'http://placehold.it/20x20'}
-              size="small"
-            />
+              to={`/user/${likeAuthor.login}`}
+            >
+              <Avatar
+                className="tweet__thumb"
+                avatar={UserAvatar}
+                size="small"
+              />
+            </Link>
           ))}
         </div>
         <Like
@@ -69,6 +79,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleModal('tweet'));
     dispatch(resetDetailedTweet());
   },
+  getUserData: (login) => dispatch(getOthersData(login)),
   onTweetLikeClick: (id) => dispatch(likeDetailedTweet(id)),
 });
 

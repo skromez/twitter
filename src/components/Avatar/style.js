@@ -4,6 +4,7 @@ const big = css`
   width: 210px;
   height: 210px;
   border: 5px solid var(--white);
+  background: var(--white);
 
   @media (max-width: 1100px) {
     width: 140px;
