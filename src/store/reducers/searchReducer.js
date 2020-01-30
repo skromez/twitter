@@ -1,8 +1,11 @@
-import { SUBMIT_SEARCH_REQUEST, SUBMIT_SEARCH_SUCCESS, UPDATE_SEARCH } from '../types';
+import { SUBMIT_SEARCH_REQUEST, SUBMIT_SEARCH_SUCCESS, UPDATE_SEARCH, CHANGE_OFFSET } from '../types';
 
 const initialState = {
   loading: null,
-  value: null,
+  query: {
+    term: null,
+    offset: null,
+  },
   tweets: {
     total: 0,
     page: 0,
@@ -21,13 +24,23 @@ const searchReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        value: action.payload,
+        query: {
+          ...action.payload,
+        },
       };
     case UPDATE_SEARCH:
       return {
         ...state,
         tweets: {
           ...action.payload,
+        },
+      };
+    case CHANGE_OFFSET:
+      return {
+        ...state,
+        query: {
+          ...state.query,
+          offset: action.payload,
         },
       };
     default:

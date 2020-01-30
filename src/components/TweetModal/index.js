@@ -43,6 +43,7 @@ const TweetModal = ({ detailedTweetInfo, closeTweetModal, onTweetLikeClick, getU
           </p>
           {detailedTweetInfo.likes.map((likeAuthor) => (
             <Link
+              className="tweet__thumb"
               onClick={() => {
                 getUserData(likeAuthor.login);
                 closeTweetModal();
@@ -51,7 +52,7 @@ const TweetModal = ({ detailedTweetInfo, closeTweetModal, onTweetLikeClick, getU
               to={`/user/${likeAuthor.login}`}
             >
               <Avatar
-                className="tweet__thumb"
+                user={`${likeAuthor.login}`}
                 avatar={UserAvatar}
                 size="small"
               />

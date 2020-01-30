@@ -6,8 +6,7 @@ import {
   SEND_TWEET_REQUEST,
   SEND_TWEET_SUCCESS,
   TOGGLE_EDIT_TWEET,
-  UPDATE_SEARCH,
-  UPDATE_TWEETS
+  UPDATE_TWEETS,
 } from '../types';
 
 const initialState = {

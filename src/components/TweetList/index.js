@@ -34,9 +34,9 @@ const TweetList = ({
   });
   const items = renderItems(tweets);
   return (
-    <>
+    <ul className='feed__tweets'>
       {items}
-    </>
+    </ul>
   );
 };
 
